@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arihant Jewellery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styless.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top ">
+    <div class="container">
+        <a class="navbar-brand text-warning" href="#">Arihant Jewellery</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="jewelleryDropdown" role="button" data-bs-toggle="dropdown">Jewellery</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#gold">Gold Jewellery</a></li>
+                        <li><a class="dropdown-item" href="#silver">Silver Jewellery</a></li>
+                        <li><a class="dropdown-item" href="#platinum">Platinum Jewellery</a></li>
+                        <li><a class="dropdown-item" href="#diamond">Diamond Jewellery</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#shop">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="#cart">🛒</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">👤</a>
+                    <div class="dropdown-menu dropdown-menu-end p-4" aria-labelledby="profileDropdown">
+                        <h2>Login to Arihant Jewellery</h2>
+        <form action="login_action.php" method="POST">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+        </form>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search">
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Home Section with Carousel -->
+<section id="home" class="text-center text-light bg-dark p-5">
+    <div class="container">
+        <h1>Welcome to Arihant Jewellery</h1>
+        <p>Explore our exclusive collection of gold, silver, platinum, and diamond jewelry.</p>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="home.jpg" class="d-block w-100" alt="Gold Necklace">
+                </div>
+                <div class="carousel-item">
+                    <img src="home1.jpg" class="d-block w-100" alt="Silver Bracelet">
+                </div>
+                <div class="carousel-item">
+                    <img src="download.jpeg" class="d-block w-100" alt="Diamond Earrings">
+                </div>
+                <div class="carousel-item">
+                    <img src="home1.jpg" class="d-block w-100" alt="Platinum Ring">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<!-- Gold Jewellery Section -->
+<section id="gold" class="bg-dark text-warning p-5">
+    <div class="container">
+        <h2>Gold Jewellery Collection</h2>
+        <div class="row">
+            <!-- First Item -->
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Necklace">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Necklace</h5>
+                        <p class="price">$500</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>24K Pure Gold, Weight: 20g</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Second Item -->
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more items similarly -->
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            <!--  -->
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- Silver Jewellery Section -->
+<section id="silver" class="bg-dark text-warning p-5">
+    <div class="container">
+        <h2>Silver Jewellery Collection</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- Platinum Jewellery Section -->
+<section id="platinum" class="bg-dark text-warning p-5">
+    <div class="container">
+        <h2>Platinum Jewellery Collection</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- Diamond Jewellery Section -->
+<section id="diamond" class="bg-dark text-warning p-5">
+    <div class="container">
+        <h2>Diamond Jewellery Collection</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- Shop Section (All Jewellery) -->
+<section id="shop" class="bg-dark text-warning p-5">
+    <div class="container">
+        <h2>Shop All Jewellery</h2>
+        <div class="row">
+            <!-- Add a combination of all jewelry items here -->
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card item">
+                    <img src="download.jpeg" class="card-img-top" alt="Gold Ring">
+                    <div class="card-body">
+                        <h5 class="card-title">Gold Ring</h5>
+                        <p class="price">$300</p>
+                        <button class="btn btn-warning">Try On</button>
+                        <button class="btn btn-dark">Shop Now</button>
+                    </div>
+                    <div class="hover-details">
+                        <p>18K Gold, Weight: 10g</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="bg-warning text-dark p-5">
+    <div class="container">
+        <h2>About Arihant Jewellery</h2>
+        <p>Welcome to Arihant Jewellery, where craftsmanship meets luxury. Our passion for perfection and commitment to excellence is evident in every piece of jewelry we create.</p>
+    </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

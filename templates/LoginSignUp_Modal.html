@@ -1,0 +1,78 @@
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Your Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>Access account & manage your orders.</p>
+                
+                <!-- Buttons for Sign Up and Log In -->
+                <div class="d-flex justify-content-around mt-4">
+                    <button class="btn btn-primary" id="logInButton" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#logInModal">log In</button>
+                    <button class="btn btn-primary" id="signupButton" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional: Log Up Modal -->
+<div class="modal fade" id="logInModal" tabindex="-1" aria-labelledby="logInModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logInModalLabel">log In</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="logInForm" action="/login" method="POST">
+                    <div class="mb-3">
+                        <label for="logInEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="logInEmail" placeholder="abc@gmail.com" name="logInEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="logInPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="logInPassword" placeholder="*******" name="logInPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log into the Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional: Sign Up Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" action="/signup" method="POST">
+                    <div class="mb-3">
+                        <label for="signupName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="signupName" placeholder="Your Name" name="signupName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="signupEmail" placeholder="abc@gmail.com" name="signupEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="signupPassword" placeholder="*******" name="signupPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
