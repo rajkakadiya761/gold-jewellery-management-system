@@ -62,12 +62,31 @@ def login():
     
     return render_template("home.html")  # Stay on the same page and display the flash message
 
+@app.route('/forgot-password', methods=['GET'])
+def forgotPassword():
+    email = request.args.get('email')
+    token = generate_confirmation_token(email)
+    confirm_url = url_for('pass_reset', token=token, _external=True)
+    subject = "Forgot Password - Email Confirmation"
+    body = f"""
+    Please confirm your forget password request by clicking the link below:
+    {confirm_url}
+    """
+
+    try:
+        msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[email], body=body)
+        mail.send(msg)
+        flash("Please confirm forget password link sent to your email", "success")
+    except Exception as e:
+        print(f"Error sending email: {e}") 
+    return render_template("home.html")
+
 @app.route('/resend-confirmation')
 def resend_confirmation():
     email = request.args.get('email')
     if email:
         send_confirmation_email(email)
-        flash("Verification email has been re-sent.", "success")
+        flash("Verification email has been sent.", "success")
     else:
         flash("Invalid email address.", "danger")
     return render_template("home.html")  # Redirect or render an appropriate template
@@ -115,7 +134,6 @@ def signUp():
     flash("Signup successful! Please check your email to confirm your account.", "success")
     return render_template("home.html")
 
-
 # Confirm a token and decode the email
 def confirm_token(token, expiration=3600):
     serializer = URLSafeTimedSerializer(app.secret_key)
@@ -124,6 +142,17 @@ def confirm_token(token, expiration=3600):
     except Exception:
         return False
     return email
+
+@app.route('/passReset/<token>', methods=['GET', 'POST'])
+def pass_reset(token):
+    # Decode the token to extract the email
+    email = confirm_token(token)
+    if not email:
+        flash("The confirmation link is invalid or has expired.", "danger")
+        return render_template("home.html")
+
+    # For GET request, render the page with modal
+    return render_template("home.html", email=email, show_modal=True)
 
 @app.route('/confirm/<token>')
 def confirm_email(token):
@@ -142,6 +171,21 @@ def confirm_email(token):
         flash("User not found.", "danger")
     return render_template("home.html")
     
+@app.route('/reset-password', methods=['POST'])
+def resetPass():
+    # Get the new password from the form
+    email = request.form.get('email')
+    new_password = request.form.get('newPassword')
+
+    user = Users.query.filter_by(email=email).first()
+    if user:
+        # Update the user's password (hashed for security)
+        user.password = new_password  # Store plain text password directly
+        db.session.commit()
+        flash("Your password has been updated successfully!", "success")
+    else:
+        flash("User not found.", "danger")
+    return render_template("home.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

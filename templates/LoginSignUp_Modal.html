@@ -43,7 +43,7 @@
                     <!-- Flexbox for Button and Link -->
                     <div class="d-flex justify-content-between align-items-center">
                         <button type="submit" class="btn btn-primary">Log into the Account</button>
-                        <a href="/forgot-password" class="text-light text-decoration-none">Forgot Password?</a>
+                        <a href="#" id="forgotPasswordLink" class="text-light text-decoration-none">Forgot Password?</a>
                     </div>
                 </form>
             </div>
@@ -79,3 +79,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Add an event listener to the Forgot Password link
+    document.getElementById('forgotPasswordLink').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default navigation behavior
+
+        // Get the email input value
+        const email = document.getElementById('logInEmail').value;
+
+        // Check if the email is entered
+        if (!email) {
+            alert('Please enter your email address before proceeding.');
+            return;
+        }
+
+        // Redirect to the forgot password endpoint with the email as a query parameter
+        window.location.href = `/forgot-password?email=${encodeURIComponent(email)}`;
+    });
+</script>
