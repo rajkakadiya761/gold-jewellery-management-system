@@ -14,3 +14,13 @@ class Users(db.Model):
 
     def __repr__(self):
         return f"<User {self.name}, {self.email}>"
+    
+class Complaints(db.Model):
+    complaint_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    status = db.Column(db.Enum('pending', 'inprocess', 'resolved'), default='pending')
+    type = db.Column(db.Enum('delivery', 'product', 'packaging'), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+

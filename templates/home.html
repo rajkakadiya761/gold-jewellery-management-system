@@ -390,6 +390,43 @@
 
     <!--footer-->
     <footer>
+        <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#complaintModal">File a Complaint </button>
+        <div class="modal fade" id="complaintModal" tabindex="-1" aria-labelledby="complaintModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="complaintModalLabel">File a Complaint</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/file-complaint">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Complaint Description</label>
+                                <textarea
+                                    name="message"
+                                    id="message"
+                                    rows="5"
+                                    class="form-control"
+                                    required
+                                ></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Complaint Type</label>
+                                <select name="type" id="type" class="form-select" required>
+                                    <option value="delivery">Delivery</option>
+                                    <option value="product">Product</option>
+                                    <option value="packaging">Packaging</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <p class="text-center text-light">© 2024 Arihant Jewellers, Inc. All rights reserved.</p>
         <p class="text-center text-light"><a class="text-white " href="#start">Go to Start </a></p>
     </footer>

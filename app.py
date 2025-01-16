@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, jsonify, flash, url_for
+from flask import Flask, render_template, request, jsonify, flash, url_for,session
 from markupsafe import Markup
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from manage_users import manage_users_bp  # Import the Blueprint
-from models import db, Users  
+from complaint import manage_complaints
+from models import db, Users , Complaints 
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -27,6 +28,8 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(manage_users_bp)
+    app.register_blueprint(manage_complaints)
+
 
     # Route for Home Page
     @app.route("/")
@@ -46,6 +49,7 @@ def create_app():
         if user and user.password == password:
             if user.is_confirmed:
                 if user and user.password == password and user.role=="Customer":
+                    session['user_id'] = user.user_id
                     flash("User Login Successful!", "success")  # Flash success message
                 elif user and user.password == password and user.role=="Admin":
                     flash("Admin Login Successful!", "success")  # Flash success message
