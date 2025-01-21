@@ -158,9 +158,14 @@
         <div class="content-box">
             <h5>Manage Customers</h5>
             <p>Manage customer accounts.</p>
-            <form action="/manage-users" method="POST">
-                <button type="submit">Go to Manage Users</button>
+            <!-- <a href="/manage-users">Go to Manage Users</a> -->
+            <!-- <form action="/manage-users" method="POST"> -->
+                <!-- <button type="submit">Go to Manage Users</button> -->
+            <!-- </form> -->
+            <a href="#" onclick="document.getElementById('manageUsersForm').submit(); return false;">Go to Manage Users</a>
+            <form id="manageUsersForm" action="/manage-users" method="POST" style="display: none;">
             </form>
+            
         </div>
 
         <div class="content-box">

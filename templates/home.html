@@ -16,8 +16,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
-         html {
-            scroll-behavior: smooth; /* Add smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+            /* Add smooth scrolling */
+        }
+
+        body {
+            overflow-x: hidden;
         }
 
         .dropdown-item:hover {
@@ -103,12 +108,50 @@
             0% {
                 transform: translateX(100%);
             }
+
             100% {
                 transform: translateX(-100%);
             }
         }
+
+        .modal-content {
+            background-color: #343a40;
+            /* Greyish-black color */
+            color: white;
+            /* Ensures text is visible on dark background */
+        }
+
+        .modal-header,
+        .modal-footer {
+            border-color: #4f575e;
+            /* Slightly lighter color for borders */
+        }
+
+        .alert {
+            background-color: #555;
+            /* Grey background for flash messages */
+            color: white;
+            /* White text */
+            margin-top: 20px;
+            /* Add space from the top */
+            position: relative;
+            /* To position the cross button inside the alert box */
+        }
+
+        .alert .btn-close {
+            color: rgb(244, 227, 227);
+            /* Change cross color to white */
+            opacity: 0.5;
+            position: absolute;
+            /* Position it absolutely within the alert */
+            top: 15px;
+            /* Adjust the vertical positioning */
+            right: 10px;
+            /* Adjust the horizontal positioning */
+            padding: 0.2rem 0.5rem;
+        }
     </style>
-        <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
 </head>
 
 <body class="bg-black">
@@ -116,8 +159,8 @@
     <header class="bg-dark text-white py-1" id="start">
         <div class="container">
             <div class="w-100 text-nowrap overflow-auto" style="animation: scroll-left 25s linear infinite;">
-                Gold Price: ₹57000/10g &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
-                Silver Price: ₹72000/kg &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
+                Gold Price: ₹57000/10g &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                Silver Price: ₹72000/kg &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
                 Platinum Price: ₹45000/10g
             </div>
         </div>
@@ -166,10 +209,20 @@
 
                 <!-- Log in Button and Cart -->
                 <div class="d-flex">
-                    <button class="btn btn-outline-warning me-2" type="submit" data-bs-toggle="modal"
-                            data-bs-target="#loginModal">
+                    {% if session['user_id'] %}
+                    <!-- Logout Button -->
+                    <form action="{{ url_for('logout') }}" method="POST">
+                        <button class="btn btn-outline-warning me-2" type="submit">
+                            Logout
+                        </button>
+                    </form>
+                    {% else %}
+                    <!-- Login Button -->
+                    <button class="btn btn-outline-warning me-2" type="button" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">
                         <i class="bi bi-person"></i>
                     </button>
+                    {% endif %}
                     <a href="#" class="btn btn-outline-warning">
                         <i class="bi bi-cart"></i> <!-- Bootstrap Icons cart icon -->
                     </a>
@@ -181,27 +234,26 @@
     <!-- For flashing message notification -->
     <!-- Display Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert-container">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div id="flashMessages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show">
+            {{ message }}
+            <!-- Remove the "X" inside the button; let Bootstrap handle it -->
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
-
 
     <!-- Include the Login Modal -->
     {% include 'LoginSignUp_Modal.html' %}
 
     {% if show_modal %}
     <!-- Modal for Password Reset -->
-    <div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel" aria-hidden="true">
+    <div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -212,7 +264,8 @@
                     <form id="resetPasswordForm" action="/reset-password" method="POST">
                         <div class="mb-3">
                             <label for="resetEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="resetEmail" value="{{ email }}" name="email" readonly>
+                            <input type="email" class="form-control" id="resetEmail" value="{{ email }}" name="email"
+                                readonly>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">New Password</label>
@@ -229,20 +282,30 @@
             const modal = new bootstrap.Modal(document.getElementById('passwordResetModal'));
             modal.show();
         });
-    </script>    
+
+        setTimeout(function () {
+            const flashMessages = document.getElementById('flashMessages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none'; // Hide flash messages after 10 seconds
+            }
+        }, 5000);
+    </script>
     {% endif %}
 
     <!--carousal-->
     <div id="carouselExampleRide" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="d-block w-100" alt="no img found">
+                <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="d-block w-100"
+                    alt="no img found">
             </div>
             <div class="carousel-item">
-                <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="d-block w-100" alt="no img found">
+                <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="d-block w-100"
+                    alt="no img found">
             </div>
             <div class="carousel-item">
-                <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="d-block w-100" alt="no img found">
+                <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="d-block w-100"
+                    alt="no img found">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
@@ -265,8 +328,10 @@
                 <!-- Item 1 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="card-img-top item-image" alt="Earring">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="hover-image" alt="Earring Hover">
+                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}"
+                            class="card-img-top item-image" alt="Earring">
+                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="hover-image"
+                            alt="Earring Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Earrings</h5>
                             <p class="card-text text-muted">₹1,500</p>
@@ -277,8 +342,10 @@
                 <!-- Item 2 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="card-img-top item-image" alt="Ring">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="hover-image" alt="Ring Hover">
+                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}"
+                            class="card-img-top item-image" alt="Ring">
+                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="hover-image"
+                            alt="Ring Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Ring</h5>
                             <p class="card-text text-muted">₹2,200</p>
@@ -289,8 +356,10 @@
                 <!-- Item 3 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="card-img-top item-image" alt="Bracelet">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="hover-image" alt="Bracelet Hover">
+                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}"
+                            class="card-img-top item-image" alt="Bracelet">
+                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="hover-image"
+                            alt="Bracelet Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Bracelet</h5>
                             <p class="card-text text-muted">₹3,000</p>
@@ -301,8 +370,10 @@
                 <!-- Item 4 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="card-img-top item-image" alt="Necklace">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="hover-image" alt="Necklace Hover">
+                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}"
+                            class="card-img-top item-image" alt="Necklace">
+                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="hover-image"
+                            alt="Necklace Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Necklace</h5>
                             <p class="card-text text-muted">₹4,500</p>
@@ -313,8 +384,10 @@
                 <!-- Item 1 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="card-img-top item-image" alt="Earring">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="hover-image" alt="Earring Hover">
+                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}"
+                            class="card-img-top item-image" alt="Earring">
+                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="hover-image"
+                            alt="Earring Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Earrings</h5>
                             <p class="card-text text-muted">₹1,500</p>
@@ -325,8 +398,10 @@
                 <!-- Item 2 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="card-img-top item-image" alt="Ring">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="hover-image" alt="Ring Hover">
+                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}"
+                            class="card-img-top item-image" alt="Ring">
+                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="hover-image"
+                            alt="Ring Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Ring</h5>
                             <p class="card-text text-muted">₹2,200</p>
@@ -337,8 +412,10 @@
                 <!-- Item 3 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="card-img-top item-image" alt="Bracelet">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="hover-image" alt="Bracelet Hover">
+                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}"
+                            class="card-img-top item-image" alt="Bracelet">
+                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="hover-image"
+                            alt="Bracelet Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Bracelet</h5>
                             <p class="card-text text-muted">₹3,000</p>
@@ -349,8 +426,10 @@
                 <!-- Item 4 -->
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-warning-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="card-img-top item-image" alt="Necklace">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="hover-image" alt="Necklace Hover">
+                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}"
+                            class="card-img-top item-image" alt="Necklace">
+                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="hover-image"
+                            alt="Necklace Hover">
                         <div class="card-body text-center">
                             <h5 class="card-title">Necklace</h5>
                             <p class="card-text text-muted">₹4,500</p>
@@ -374,7 +453,8 @@
             </p>
         </div>
         <div class="col-md-6 d-flex justify-content-center">
-            <img src="{{ url_for('static', filename='images/ari.png') }}" alt="Arihant Jewellers" class="img-fluid rounded" style="width: 65%; height: auto;">
+            <img src="{{ url_for('static', filename='images/ari.png') }}" alt="Arihant Jewellers"
+                class="img-fluid rounded" style="width: 65%; height: auto;">
         </div>
         <div class="col-md-6 offset-md-3 text-center mt-4">
             <div class="d-flex justify-content-center align-items-center mb-3">
@@ -390,8 +470,14 @@
 
     <!--footer-->
     <footer>
-        <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#complaintModal">File a Complaint </button>
-        <div class="modal fade" id="complaintModal" tabindex="-1" aria-labelledby="complaintModalLabel" aria-hidden="true">
+        <!-- <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#complaintModal">File a Complaint </button> -->
+        <div class="text-center mt-4">
+            <a href="#" class="text-decoration-underline" data-bs-toggle="modal" data-bs-target="#complaintModal">
+                Want To File A Complaint?
+            </a>
+        </div>
+        <div class="modal fade" id="complaintModal" tabindex="-1" aria-labelledby="complaintModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -402,13 +488,7 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="message" class="form-label">Complaint Description</label>
-                                <textarea
-                                    name="message"
-                                    id="message"
-                                    rows="5"
-                                    class="form-control"
-                                    required
-                                ></textarea>
+                                <textarea name="message" id="message" rows="5" class="form-control" required></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="type" class="form-label">Complaint Type</label>
@@ -426,9 +506,12 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <p class="text-center text-light">© 2024 Arihant Jewellers, Inc. All rights reserved.</p>
-        <p class="text-center text-light"><a class="text-white " href="#start">Go to Start </a></p>
+        </div><br>
+        <p class="text-center text-light mb-0">© 2024 Arihant Jewellers, Inc. All rights reserved.</p>
+        <p class="text-center text-light mb-0">
+            <a class="text-white" href="#start">Go to Start</a>
+        </p>
+        <br>
     </footer>
 
 
@@ -457,18 +540,19 @@
             }, { once: true }); // Only trigger this handler once after the modal hides
         });
 
+        
     </script>
     <!-- Bootstrap JS and Bootstrap Icons -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-     <!-- Include jQuery (necessary for Bootstrap's JavaScript plugins) -->
-     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-     <!-- Include Bootstrap's JavaScript -->
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Include jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Include Bootstrap's JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap JavaScript Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
-</html> 
+</html>

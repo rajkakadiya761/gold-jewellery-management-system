@@ -7,7 +7,7 @@ manage_complaints = Blueprint('complaint', __name__)
 def file_complaint():
     if 'user_id' not in session:
         flash("You must be logged in to file a complaint", "danger")
-        return redirect('home.html')
+        return render_template('home.html')
 
     if request.method == 'POST':
         user_id = session['user_id']
@@ -18,9 +18,8 @@ def file_complaint():
         db.session.add(new_complaint)
         db.session.commit()
 
-        flash("Complaint filed successfully!", "success")
-
-    return render_template('home.html')
+        flash("Complaint filed successfully!", "success")    
+        return render_template('home.html')
 
 # Route to display complaints in the admin panel
 @manage_complaints.route('/manage-complaints')

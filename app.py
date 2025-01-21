@@ -50,9 +50,8 @@ def create_app():
             if user.is_confirmed:
                 if user and user.password == password and user.role=="Customer":
                     session['user_id'] = user.user_id
-                    flash("User Login Successful!", "success")  # Flash success message
+                    flash(f"{user.name} from {user.email} Login is Successful!", "success")  # Flash success message
                 elif user and user.password == password and user.role=="Admin":
-                    flash("Admin Login Successful!", "success")  # Flash success message
                     return render_template("admin.html")
             else:
                 link = Markup(
@@ -173,6 +172,13 @@ def create_app():
         else:
             flash("User not found.", "danger")
         return render_template("home.html")
+    
+    @app.route('/logout', methods=['POST'])
+    def logout():
+       session.pop('user_id', None)  # Remove user_id from session
+       flash('You have been logged out.Visit us again. Thankyou!!', 'success')
+       return render_template('home.html')
+
         
     @app.route('/reset-password', methods=['POST'])
     def resetPass():
@@ -191,3 +197,5 @@ def create_app():
         return render_template("home.html")
 
     return app
+ 
+   
