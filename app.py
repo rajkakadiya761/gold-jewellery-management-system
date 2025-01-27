@@ -6,6 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from manage_users import manage_users_bp  # Import the Blueprint
 from complaint import manage_complaints
 from models import db, Users , Complaints 
+from priceAPI import make_gapi_request
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -34,7 +35,8 @@ def create_app():
     # Route for Home Page
     @app.route("/")
     def page1():
-        return render_template("home.html")
+      metal_prices = make_gapi_request() 
+      return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'])    
 
     # Login route to handle the login form submission
     @app.route('/login', methods=['POST'])
@@ -195,6 +197,19 @@ def create_app():
         else:
             flash("User not found.", "danger")
         return render_template("home.html")
+
+    @app.route('/search', methods=['GET'])
+    def search():
+      query = request.args.get('query', '').lower()
+    
+      if any(keyword in query.lower() for keyword in ['earrings', 'ear', 'earing','earring']):
+        return render_template('earrings.html')
+      else:
+        return "No results found."
+
+    @app.route('/earrings')
+    def earrings():
+      return render_template('earrings.html')
 
     return app
  

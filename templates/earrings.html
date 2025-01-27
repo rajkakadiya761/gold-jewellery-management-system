@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelry Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .card-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 10px;
+            border: 1px solid rgb(52, 55, 58);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            height: 400px;  /* Increased the height of the container */
+            transition: transform 0.3s ease;
+        }
+
+        .card-container:hover {
+            transform: scale(1.05);  /* Hover effect for card scaling */
+        }
+
+        .item-image {
+            height: 300px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            text-align: left;
+            width: 100%;
+            height: 60px;  /* Reduced height of the white part */
+            background-color: white;
+            padding: 5px;
+        }
+
+        .card-content h5 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 4px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: rgb(11, 11, 11);
+        }
+
+        .card-content p {
+            font-size: 16px;
+            color: #0d0d0d;
+            margin-left: 4px;
+            margin-top: 5px;  /* Reduced margin for better layout */
+        }
+
+        .add-to-cart {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;  /* Button height */
+            background-color: rgb(33, 37, 41);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            line-height: 40px;  /* Vertically centered text */
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+
+        .add-to-cart:hover {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid my-4">
+        <div class="row">
+            <!-- Jewelry Card 1 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card-container">
+                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
+                    <div class="card-content">
+                        <h5>Gold Ring</h5>
+                        <p>₹1,500</p>
+                    </div>
+                    <div class="add-to-cart">Add to Cart</div>
+                </div>
+            </div>
+            <!-- Jewelry Card 2 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card-container">
+                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
+                    <div class="card-content">
+                        <h5>Ring</h5>
+                        <p>₹2,200</p>
+                    </div>
+                    <div class="add-to-cart">Add to Cart</div>
+                </div>
+            </div>
+            <!-- Jewelry Card 3 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card-container">
+                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
+                    <div class="card-content">
+                        <h5>Bracelet</h5>
+                        <p>₹3,000</p>
+                    </div>
+                    <div class="add-to-cart">Add to Cart</div>
+                </div>
+            </div>
+            <!-- Jewelry Card 4 -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card-container">
+                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
+                    <div class="card-content">
+                        <h5>Necklace</h5>
+                        <p>₹4,500</p>
+                    </div>
+                    <div class="add-to-cart">Add to Cart</div>
+                </div>
+            </div>
+            <!-- More Jewelry Cards... -->
+        </div>
+    </div>
+</body>
+
+</html>

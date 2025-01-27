@@ -75,4 +75,5 @@ def delete_customer(user_id):
         db.session.delete(user)
         db.session.commit()
     users = Users.query.all()
+    flash("User Deleted succesfully.", "success")
     return render_template('manageUsers.html', users=users)

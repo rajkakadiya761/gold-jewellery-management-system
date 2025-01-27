@@ -14,6 +14,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
     <style>
         html {
@@ -150,6 +152,22 @@
             /* Adjust the horizontal positioning */
             padding: 0.2rem 0.5rem;
         }
+
+        @keyframes scroll-left {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        .scrolling-text {
+            white-space: nowrap;
+            overflow: hidden;
+            animation: scroll-left 25s linear infinite;
+        }
     </style>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
 </head>
@@ -158,10 +176,11 @@
     <!--header-->
     <header class="bg-dark text-white py-1" id="start">
         <div class="container">
-            <div class="w-100 text-nowrap overflow-auto" style="animation: scroll-left 25s linear infinite;">
-                Gold Price: ₹57000/10g &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-                Silver Price: ₹72000/kg &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-                Platinum Price: ₹45000/10g
+            <div class="scrolling-text">
+                Gold Price: ₹{{ XAU }} /kg &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                Silver Price : ₹{{ XAG }} / kg&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                Platinum Price : ₹{{ XPT }} / kg
+                <!-- You can add more details for Silver and Platinum if needed -->
             </div>
         </div>
     </header>
@@ -189,10 +208,10 @@
                             Shop by category
                         </a>
                         <ul class="dropdown-menu bg-dark">
-                            <li><a class="dropdown-item text-light" href="#">Earrings</a></li>
+                            <li><a class="dropdown-item text-light" href="{{ url_for('earrings') }}">Earrings</a></li>
                             <li><a class="dropdown-item text-light" href="#">Rings</a></li>
                             <li><a class="dropdown-item text-light" href="#">Bracelet</a></li>
-                            <li><a class="dropdown-item text-light" href="#">Necklaces & pendant</a></li>
+                            <li><a class="dropdown-item text-light" href="#">Necklaces</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -202,10 +221,11 @@
                 </ul>
 
                 <!-- Centered Search Bar -->
-                <form class="d-flex mx-auto" role="search" style="flex: 1; justify-content: center;">
-                    <input class="form-control me-2 p-2" type="search" placeholder="Search" aria-label="Search"
-                        style="width: 60%;">
+                <form class="d-flex mx-auto" role="search" style="flex: 1; justify-content: center;" action="{{ url_for('search') }}" method="GET">
+                    <input class="form-control me-2 p-2" type="search" name="query" placeholder="Search" aria-label="Search" style="width: 60%;">
+                    <button type="submit" class="btn btn-outline-warning">Search</button>
                 </form>
+                
 
                 <!-- Log in Button and Cart -->
                 <div class="d-flex">
@@ -237,7 +257,7 @@
     {% if messages %}
     <div id="flashMessages">
         {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show">
+        <div class="alert alert-warning alert-{{ category }} alert-dismissible fade show">
             {{ message }}
             <!-- Remove the "X" inside the button; let Bootstrap handle it -->
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -246,6 +266,17 @@
     </div>
     {% endif %}
     {% endwith %}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                const flashMessages = document.getElementById('flashMessages');
+                if (flashMessages) {
+                    flashMessages.style.display = 'none'; // Hides the entire container
+                }
+            }, 5000); // 5000ms = 5 seconds
+        });
+    </script>
 
     <!-- Include the Login Modal -->
     {% include 'LoginSignUp_Modal.html' %}
@@ -283,12 +314,6 @@
             modal.show();
         });
 
-        setTimeout(function () {
-            const flashMessages = document.getElementById('flashMessages');
-            if (flashMessages) {
-                flashMessages.style.display = 'none'; // Hide flash messages after 10 seconds
-            }
-        }, 5000);
     </script>
     {% endif %}
 
@@ -472,7 +497,8 @@
     <footer>
         <!-- <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#complaintModal">File a Complaint </button> -->
         <div class="text-center mt-4">
-            <a href="#" class="text-decoration-underline" data-bs-toggle="modal" data-bs-target="#complaintModal">
+            <a href="#" class="text-decoration-underline text-warning" data-bs-toggle="modal"
+                data-bs-target="#complaintModal">
                 Want To File A Complaint?
             </a>
         </div>
@@ -540,7 +566,7 @@
             }, { once: true }); // Only trigger this handler once after the modal hides
         });
 
-        
+
     </script>
     <!-- Bootstrap JS and Bootstrap Icons -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

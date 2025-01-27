@@ -23,4 +23,27 @@ class Complaints(db.Model):
     type = db.Column(db.Enum('delivery', 'product', 'packaging'), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+class Products(db.Model):
+    product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(150), nullable=False)
+    product_weight = db.Column(db.Float, nullable=False)
+    size = db.Column(db.Enum('small', 'medium', 'large', name='size_enum'), nullable=False)
+    category = db.Column(db.Enum('ring', 'necklace', 'earring', 'bracelet', name='category_enum'), nullable=False)
+    photo1 = db.Column(db.String(255), nullable=False)  # Path or URL to image 1
+    photo2 = db.Column(db.String(255), nullable=False)  # Path or URL to image 2
+
+
+class Material(db.Model):
+    material_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    material_name = db.Column(db.String(50), unique=True, nullable=False)
+
+class ProductMaterial(db.Model):
+    product_material_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+    material_id = db.Column(db.Integer, db.ForeignKey('materials.material_id'), nullable=False)
+
+    # Relationship
+    product = db.relationship('Product', backref=db.backref('product_materials', lazy=True))
+    material = db.relationship('Material', backref=db.backref('product_materials', lazy=True))
 
