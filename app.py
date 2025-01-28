@@ -7,6 +7,7 @@ from manage_users import manage_users_bp  # Import the Blueprint
 from complaint import manage_complaints
 from models import db, Users , Complaints 
 from priceAPI import make_gapi_request
+from manage_products import manage_products_bp
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -30,6 +31,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(manage_users_bp)
     app.register_blueprint(manage_complaints)
+    app.register_blueprint(manage_products_bp)
 
 
     # Route for Home Page
