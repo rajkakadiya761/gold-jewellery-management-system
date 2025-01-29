@@ -125,7 +125,7 @@
                 <td>{{ user.role }}</td>
                 <td>{{ 'Confirmed' if user.is_confirmed else 'Not Confirmed' }}</td>
                 <td>{{ user.password }}</td>
-                <td>
+                <td class="d-flex gap-2">
                     <a data-bs-target="#editCustomerModal" href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-user-id="{{ user.user_id }}">Edit</a>
                     <a href="{{ url_for('manage_users.delete_customer', user_id=user.user_id) }}" class="btn btn-danger btn-sm">Delete</a>
                 </td>

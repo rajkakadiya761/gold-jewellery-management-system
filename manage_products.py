@@ -83,9 +83,6 @@ def add_product():
 
     return redirect(url_for('manage_products.manage_products'))
 
-
-
-
 @manage_products_bp.route('/update-product/<int:product_id>', methods=['POST'])
 def update_product(product_id):
     try:

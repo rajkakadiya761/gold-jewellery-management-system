@@ -5,13 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arihant Jewellers</title>
+    <!-- Bootstrap 5 CSS (only one link) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <!-- Optional: Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
     <style>
+        /* Custom styles */
+        .dropdown-menu {
+            z-index: 1050;
+        }
+
         body {
             background-color: black;
             color: white;
+            padding: 20px;
         }
+
+        .page-container {
+            border: 5px solid rgb(232, 245, 192);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .tags-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: grey;
+            color: white;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .tag:hover {
+            background-color: #666;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgb(78, 65, 48);
+        }
+
 
         .card-container {
             position: relative;
@@ -20,12 +67,12 @@
             margin: 10px;
             border: 1px solid rgb(52, 55, 58);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            height: 400px;  /* Increased the height of the container */
+            height: 400px;
             transition: transform 0.3s ease;
         }
 
         .card-container:hover {
-            transform: scale(1.05);  /* Hover effect for card scaling */
+            transform: scale(1.05);
         }
 
         .item-image {
@@ -37,8 +84,8 @@
         .card-content {
             text-align: left;
             width: 100%;
-            height: 60px;  /* Reduced height of the white part */
-            background-color: white;
+            height: 60px;
+            background-color: rgb(238, 231, 231);
             padding: 5px;
         }
 
@@ -55,7 +102,7 @@
             font-size: 16px;
             color: #0d0d0d;
             margin-left: 4px;
-            margin-top: 5px;  /* Reduced margin for better layout */
+            margin-top: 5px;
         }
 
         .add-to-cart {
@@ -63,74 +110,185 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 40px;  /* Button height */
+            height: 40px;
             background-color: rgb(33, 37, 41);
-            color: white;
+            color: rgb(243, 236, 236);
             text-align: center;
             font-weight: bold;
-            line-height: 40px;  /* Vertically centered text */
+            line-height: 40px;
             transition: background-color 0.3s, color 0.3s;
             cursor: pointer;
         }
 
         .add-to-cart:hover {
             background-color: black;
-            color: white;
+            color: rgb(239, 228, 73);
+        }
+
+        .page-container {
+            border: 1px solid white;
+            /* Thin white border */
+            padding: 20px;
         }
     </style>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
 </head>
 
 <body>
-    <div class="container-fluid my-4">
-        <div class="row">
-            <!-- Jewelry Card 1 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card-container">
-                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
-                    <div class="card-content">
-                        <h5>Gold Ring</h5>
-                        <p>₹1,500</p>
-                    </div>
-                    <div class="add-to-cart">Add to Cart</div>
+    <nav class="navbar navbar-expand-lg text-light bg-black p-3 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-5 text-uppercase fw-bold text-warning">Arihant Jewelers</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active text-light" aria-current="page" href="/#start">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{{ url_for('page1') }}#About">About us</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Shop by category
+                        </a>
+                        <ul class="dropdown-menu bg-dark">
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
+                            <li><a class="dropdown-item text-light" href="#">Rings</a></li>
+                            <li><a class="dropdown-item text-light" href="#">Bracelet</a></li>
+                            <li><a class="dropdown-item text-light" href="#">Necklaces</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-light" href="{{ url_for('page1') }}#all">All</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Centered Search Bar -->
+                <form class="d-flex mx-auto" role="search" style="flex: 1; justify-content: center;"
+                    action="{{ url_for('search') }}" method="GET">
+                    <input class="form-control me-2 p-2" type="search" name="query" placeholder="Search"
+                        aria-label="Search" style="width: 60%;">
+                    <button type="submit" class="btn btn-outline-warning">Search</button>
+                </form>
+
+                <div class="d-flex">
+                    {% if session['user_id'] %}
+                    <!-- Logout Button -->
+                    <form action="{{ url_for('logout') }}" method="POST">
+                        <button class="btn btn-outline-warning me-2" type="submit">
+                            Logout
+                        </button>
+                    </form>
+                    {% else %}
+                    <!-- Login Button -->
+                    <button class="btn btn-outline-warning me-2" type="button" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">
+                        <i class="bi bi-person"></i>
+                    </button>
+                    {% endif %}
+                    <a href="#" class="btn btn-outline-warning">
+                        <i class="bi bi-cart"></i> <!-- Bootstrap Icons cart icon -->
+                    </a>
                 </div>
             </div>
-            <!-- Jewelry Card 2 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card-container">
-                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
-                    <div class="card-content">
-                        <h5>Ring</h5>
-                        <p>₹2,200</p>
-                    </div>
-                    <div class="add-to-cart">Add to Cart</div>
+        </div>
+    </nav>
+
+    <!-- Include the Login Modal -->
+    {% include 'LoginSignUp_Modal.html' %}
+
+    {% if show_modal %}
+    <!-- Modal for Password Reset -->
+    <div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordResetModalLabel">Reset Your Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="resetPasswordForm" action="/reset-password" method="POST">
+                        <div class="mb-3">
+                            <label for="resetEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="resetEmail" value="{{ email }}" name="email"
+                                readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                    </form>
                 </div>
             </div>
-            <!-- Jewelry Card 3 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card-container">
-                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
-                    <div class="card-content">
-                        <h5>Bracelet</h5>
-                        <p>₹3,000</p>
-                    </div>
-                    <div class="add-to-cart">Add to Cart</div>
-                </div>
-            </div>
-            <!-- Jewelry Card 4 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card-container">
-                    <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="item-image" alt="Jewelry">
-                    <div class="card-content">
-                        <h5>Necklace</h5>
-                        <p>₹4,500</p>
-                    </div>
-                    <div class="add-to-cart">Add to Cart</div>
-                </div>
-            </div>
-            <!-- More Jewelry Cards... -->
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = new bootstrap.Modal(document.getElementById('passwordResetModal'));
+            modal.show();
+        });
+
+    </script>
+    {% endif %}
+
+    <!-- Page Content -->
+    <div class="container-fluid page-container">
+        <h4 class="text-warning" style="text-align: center; text-decoration: underline;">Earrings</h4>
+        <!-- Tags Section -->
+        <div class="tags-container" style="text-align: center; margin-bottom: 20px;">
+            <span class="tag"
+                style="display: inline-block; padding: 5px 15px; margin: 10px; border: 2px solid silver; color: rgb(232, 245, 192); border-radius: 50px; font-weight: bold; cursor: pointer;"
+                onclick="filterByMaterial('all')">All</span>
+            <span class="tag"
+                style="display: inline-block; padding: 5px 15px; margin: 10px; border: 2px solid silver; color: rgb(232, 245, 192); border-radius: 50px; font-weight: bold; cursor: pointer;"
+                onclick="filterByMaterial('Gold')">Gold</span>
+            <span class="tag"
+                style="display: inline-block; padding: 5px 15px; margin: 10px; border: 2px solid silver; color: rgb(232, 245, 192); border-radius: 50px; font-weight: bold; cursor: pointer;"
+                onclick="filterByMaterial('Silver')">Silver</span>
+            <span class="tag"
+                style="display: inline-block; padding: 5px 15px; margin: 10px; border: 2px solid silver; color: rgb(232, 245, 192); border-radius: 50px; font-weight: bold; cursor: pointer;"
+                onclick="filterByMaterial('Platinum')">Platinum</span>
+        </div>
+
+        <script>
+            function filterByMaterial(material) {
+                // Redirect to the same page with a material filter query parameter
+                window.location.href = `/earrings?material=${material}`;
+            }
+
+        </script>
+        <div class="row">
+            {% for earring in earrings %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card-container">
+                    <a href="{{ url_for('product.earring_details', product_id=earring.product_id) }}"
+                        class="text-decoration-none text-white">
+                        <img src="{{ earring.photo1 }}" class="item-image" alt="Jewelry">
+                        <div class="card-content">
+                            <h5>{{ earring.name }}</h5>
+                            <p>{{ earring.product_weight }}g</p>
+                        </div>
+                    </a>
+                    <div class="add-to-cart">Add to Cart</div>
+                    <form action="{{ url_for('product.delete_earring', product_id=earring.product_id) }}" method="POST">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS (with Popper) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

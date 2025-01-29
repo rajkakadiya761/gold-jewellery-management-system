@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request, jsonify, flash, url_for,session
+from flask import Flask, render_template, request, flash, url_for,session, redirect
 from markupsafe import Markup
+from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from manage_users import manage_users_bp  # Import the Blueprint
 from complaint import manage_complaints
-from models import db, Users , Complaints 
+from models import Products, db, Users , Complaints 
 from priceAPI import make_gapi_request
 from manage_products import manage_products_bp
+from earrings import product_bp
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -32,6 +34,7 @@ def create_app():
     app.register_blueprint(manage_users_bp)
     app.register_blueprint(manage_complaints)
     app.register_blueprint(manage_products_bp)
+    app.register_blueprint(product_bp)
 
 
     # Route for Home Page
@@ -56,7 +59,7 @@ def create_app():
                     session['user_id'] = user.user_id
                     flash(f"{user.name} from {user.email} Login is Successful!", "success")  # Flash success message
                 elif user and user.password == password and user.role=="Admin":
-                    return render_template("admin.html")
+                      return render_template('admin.html')
             else:
                 link = Markup(
                     'Please confirm Email Verification Link! '
@@ -67,7 +70,7 @@ def create_app():
             flash("Login Failed! Invalid email or password.", "danger")  # Flash error message
         
         return render_template("home.html")  # Stay on the same page and display the flash message
-
+    
     @app.route('/forgot-password', methods=['GET'])
     def forgotPassword():
         email = request.args.get('email')
@@ -202,16 +205,15 @@ def create_app():
 
     @app.route('/search', methods=['GET'])
     def search():
-      query = request.args.get('query', '').lower()
-    
-      if any(keyword in query.lower() for keyword in ['earrings', 'ear', 'earing','earring']):
-        return render_template('earrings.html')
-      else:
+     query = request.args.get('query', '').lower()
+
+     if any(keyword in query for keyword in ['earrings', 'ear', 'earing', 'earring']):
+        # 🔹 Fetch earrings directly and render template instead of redirecting
+        earrings = Products.query.filter_by(category='earring').all()
+        return render_template('earrings.html', earrings=earrings)
+     else:
         return "No results found."
 
-    @app.route('/earrings')
-    def earrings():
-      return render_template('earrings.html')
 
     return app
  
