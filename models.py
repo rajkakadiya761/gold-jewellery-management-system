@@ -35,7 +35,7 @@ class Products(db.Model):
         nullable=False
     )
     category = db.Column(
-        db.Enum('ring', 'necklace', 'earring', 'bracelet', name='category_enum'),
+        db.Enum('ring', 'necklace', 'earrings', 'bracelete', name='category_enum'),
         nullable=False
     )
     photo1 = db.Column(db.String(255), nullable=False)

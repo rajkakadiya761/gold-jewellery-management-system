@@ -108,6 +108,33 @@
             color: white;
         }
 
+        .logout-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            z-index: 1000;
+        }
+
+        .logout-btn a {
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Smaller button with Bootstrap outline style */
+        .logout-btn button {
+            background-color: transparent;
+            border: 2px solid #ffc107; /* Outline color */
+            color: #ffc107; /* Text color */
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .logout-btn button:hover {
+            background-color: #ffc107; /* Highlight on hover */
+            color: black;
+        }
+
         /* Responsive Layout */
         @media (min-width: 768px) {
             .main-content {
@@ -132,6 +159,14 @@
     <div class="welcome-section">
         <h1>Welcome to the Admin Panel----Arihant Jewellers</h1>
     </div>
+
+    <!-- Logout Button -->
+    <div class="logout-btn">
+        <a href="/">
+            <button class="btn btn-outline-warning me-2">Logout</button>
+        </a>
+    </div>
+
     <div class="main-content" id="main-content">
         <!-- Welcome Section -->
 
@@ -145,7 +180,9 @@
         <div class="content-box">
             <h5>Manage Products</h5>
             <p>Add, update, and manage product listings.</p>
-            <a href="/manage-products">Go to Manage Products</a>
+            <a href="#" onclick="document.getElementById('manageProductsForm').submit(); return false;">Go to Manage Products</a>
+            <form id="manageProductsForm" action="/manage-products" method="POST" style="display: none;">
+            </form>
         </div>
 
         <div class="content-box">

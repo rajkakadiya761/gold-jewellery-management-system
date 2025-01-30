@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, flash, url_for,session, redirect
 from markupsafe import Markup
-from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
@@ -10,6 +9,10 @@ from models import Products, db, Users , Complaints
 from priceAPI import make_gapi_request
 from manage_products import manage_products_bp
 from earrings import product_bp
+from necklace import product_bp_necklace
+from bracelete import product_bp_bracelete
+from ring import product_bp_ring
+
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -29,12 +32,15 @@ def create_app():
     # Initialize extensions with the app
     db.init_app(app)
     mail.init_app(app)
-
+    
     # Register blueprints
     app.register_blueprint(manage_users_bp)
     app.register_blueprint(manage_complaints)
     app.register_blueprint(manage_products_bp)
     app.register_blueprint(product_bp)
+    app.register_blueprint(product_bp_necklace)
+    app.register_blueprint(product_bp_bracelete)
+    app.register_blueprint(product_bp_ring)
 
 
     # Route for Home Page
@@ -207,10 +213,18 @@ def create_app():
     def search():
      query = request.args.get('query', '').lower()
 
-     if any(keyword in query for keyword in ['earrings', 'ear', 'earing', 'earring']):
-        # 🔹 Fetch earrings directly and render template instead of redirecting
-        earrings = Products.query.filter_by(category='earring').all()
+     if any(keyword in query for keyword in ['earrings', 'ear', 'earing', 'earring','butti','buti']):
+        earrings = Products.query.filter_by(category='earrings').all()
         return render_template('earrings.html', earrings=earrings)
+     elif any(keyword in query for keyword in ['necklaces', 'neck', 'necklac', 'necklace','haar','har','set']):
+        necklaces = Products.query.filter_by(category='necklace').all()
+        return render_template('necklace.html', necklaces=necklaces)
+     elif any(keyword in query for keyword in ['braceletes', 'bracelete', 'hand wear', 'hand','breslet','bracelet']):
+        braceletes = Products.query.filter_by(category='necklace').all()
+        return render_template('bracelete.html', braceletes=braceletes)
+     elif any(keyword in query for keyword in ['rings', 'ring', 'viti', 'finger','finger','rig']):
+        rings = Products.query.filter_by(category='ring').all()
+        return render_template('bracelete.html', rings=rings)
      else:
         return "No results found."
 

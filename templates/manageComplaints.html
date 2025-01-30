@@ -89,7 +89,7 @@
 <body>
 
     <div class="container mt-5">
-        <h1 class="mb-4">Manage Complaints</h1>
+        <h1 class="mb-4 text-center">Manage Complaints</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div id="flashMessages">
@@ -103,7 +103,7 @@
         </div>
         {% endif %}
         {% endwith %}
-        <table class="table table-bordered">
+        <table class="table table-bordered table-responsive">
             <thead class="table-dark">
                 <tr>
                     <th>Complaint ID</th>
@@ -126,7 +126,7 @@
                     <td>{{ complaint.created_at }}</td>
                     <td>
                         <!-- Update Status Button -->
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#updateStatusModal" data-id="{{complaint.complaint_id }}"
                             data-status="{{ complaint.status }}">
                             Update Status

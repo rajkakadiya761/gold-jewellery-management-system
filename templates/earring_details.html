@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Details Page</title>
-    <!-- Bootstrap css -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-     <!-- Bootstrap icons css -->
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css"
-     rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
         body {
@@ -17,27 +16,20 @@
             color: white;
         }
 
-        .details-content {
-            padding: 40px 20px;
-        }
-
-         /* Carousel Styles */
-         .carousel-inner img {
-            height: 80vh;
+        .carousel-inner img {
+            height: 90vh;
             object-fit: cover;
             border-radius: 10px;
             transition: transform 0.8s ease, filter 0.5s ease;
         }
 
-        /* Hover Effect */
         .carousel-inner img:hover {
-            transform: scale(1.1) rotate(0.5deg);
+            transform: scale(1.1);
             filter: brightness(1.3);
         }
 
-        /* Buttons */
         .btn-custom {
-            background-color: rgb(33,37,41);
+            background-color: rgb(33, 37, 41);
             color: white;
             width: 140px;
         }
@@ -48,15 +40,44 @@
         }
 
         .btn-try-on {
-            background-color: rgb(33,37,41);
+            background-color: rgb(33, 37, 41);
             color: white;
             margin-top: 20px;
-            width: 300px;
+            width: 40%;
         }
 
         .btn-try-on:hover {
             background-color: white;
             color: black;
+        }
+
+        .quantity-group {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .quantity-group button {
+            background-color: rgb(33, 37, 41);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+        }
+
+        .quantity-group button:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            background-color: black;
+            color: white;
+            border: 1px solid grey;
+            border-radius: 5px;
+            margin: 0 5px;
         }
 
         .carousel-control-prev-icon,
@@ -65,6 +86,7 @@
         }
     </style>
 </head>
+
 <body>
     <main class="details-content container-fluid">
         <div class="row">
@@ -93,13 +115,13 @@
 
             <!-- Right Section: Product Details -->
             <div class="col-md-6">
-                <h2 class="mt-3">{{ earring.name }}</h2>
-                <p class="text-light">{{earring.category}}</p>
+                <h2 class="mt-5 fs-2">{{ earring.name }}</h2>
+                <p class="text-light text-uppercase">{{earring.category}}</p>
                 <p class="price h4" style="color: grey;">$1,299.99</p>
 
                 <div class="description">
-                    <h5>About this product:</h5>
-                    <p>T{{ earring.description }}</p>
+                    <h5 class="fs-4">About this product:</h5>
+                    <p class="fs-5">{{ earring.description }}</p>
                 </div>
 
                 <div class="mt-4">
@@ -109,6 +131,15 @@
                         <option value="Medium">Medium</option>
                         <option value="Large">Large</option>
                     </select>
+                    <br>
+                    <div class="col-6">
+                        <label for="quantity" class="form-label">Quantity:</label>
+                        <div class="quantity-group">
+                            <button id="decreaseQuantity" type="button">-</button>
+                            <input type="text" id="quantity" class="quantity-input" value="1" readonly>
+                            <button id="increaseQuantity" type="button">+</button>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <button class="btn btn-try-on btn-md"><i class="bi bi-camera">&nbsp;Try It On</i></button>
@@ -120,8 +151,26 @@
             </div>
         </div>
     </main>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quantity button functionality
+        const decreaseButton = document.getElementById('decreaseQuantity');
+        const increaseButton = document.getElementById('increaseQuantity');
+        const quantityInput = document.getElementById('quantity');
+
+        decreaseButton.addEventListener('click', () => {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        increaseButton.addEventListener('click', () => {
+            let currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        });
+    </script>
 </body>
+
 </html>

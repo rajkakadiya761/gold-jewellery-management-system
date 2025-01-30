@@ -1,16 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request,redirect, url_for, flash
 from models import db, Products,Material,ProductMaterial
 
 # Create Blueprint for product management
-product_bp = Blueprint('product', __name__)
+product_bp_ring = Blueprint('productFinger', __name__)
 
-@product_bp.route('/earrings')
-def show_earrings():
+@product_bp_ring.route('/ring')
+def show_rings():
     material = request.args.get('material', 'all')  # Default to 'all' if no material is selected
     
     if material == 'all':
-        # Show all earrings regardless of material
-        earrings = Products.query.filter_by(category='earrings').all()
+        rings = Products.query.filter_by(category='ring').all()
     else:
         # Get the material object based on the selected material name (Gold, Silver, Platinum)
         material_obj = Material.query.filter_by(material_name=material).first()  # Use 'material_name' here
@@ -19,18 +18,18 @@ def show_earrings():
             material_id = material_obj.material_id  # Use 'material_id' here, not 'id'
             
             # Get earrings that have the selected material through the ProductMaterial relation
-            earrings = db.session.query(Products).join(ProductMaterial).filter(
-                Products.category == 'earring', ProductMaterial.material_id == material_id
+            rings = db.session.query(Products).join(ProductMaterial).filter(
+                Products.category == 'ring', ProductMaterial.material_id == material_id
             ).all()
         else:
             # If no material found, show an empty list or handle as needed
-            earrings = []
+            rings = []
 
-    return render_template('earrings.html', earrings=earrings, material=material)
+    return render_template('ring.html', rings=rings, material=material)
 
 
-@product_bp.route('/delete-earring/<int:product_id>', methods=['GET'])
-def delete_earring(product_id):
+@product_bp_ring.route('/delete-ring/<int:product_id>', methods=['GET'])
+def delete_ring(product_id):
     try:
         product = Products.query.get(product_id)
         if product:
@@ -43,11 +42,11 @@ def delete_earring(product_id):
         db.session.rollback()
         flash(f"Error deleting product: {str(e)}", "danger")
 
-    earrings = Products.query.filter_by(category='earring').all()
-    return render_template('earrings.html', earrings=earrings)  
+    rings = Products.query.filter_by(category='ring').all()
+    return render_template('ring.html', rings=rings)  
 
-@product_bp.route('/earring/<int:product_id>')
-def earring_details(product_id):
+@product_bp_ring.route('/ring/<int:product_id>')
+def ring_details(product_id):
     # Fetch the product from the database
     earring = Products.query.get_or_404(product_id)
     return render_template('earring_details.html', earring=earring)

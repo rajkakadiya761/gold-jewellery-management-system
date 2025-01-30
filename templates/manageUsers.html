@@ -87,7 +87,7 @@
 <body>
 
 <div class="container mt-5">
-    <h1>Manage Users</h1>
+    <h1 class="text-center">Manage Users</h1>
 
     <!-- Flash Messages (Success/Error) -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -106,7 +106,7 @@
 
     <!-- Table of Users -->
     <h2 class="mt-4">Users List</h2>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive">
         <thead>
             <tr>
 
@@ -126,7 +126,7 @@
                 <td>{{ 'Confirmed' if user.is_confirmed else 'Not Confirmed' }}</td>
                 <td>{{ user.password }}</td>
                 <td class="d-flex gap-2">
-                    <a data-bs-target="#editCustomerModal" href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-user-id="{{ user.user_id }}">Edit</a>
+                    <a data-bs-target="#editCustomerModal" href="#" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-user-id="{{ user.user_id }}">Edit</a>
                     <a href="{{ url_for('manage_users.delete_customer', user_id=user.user_id) }}" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>

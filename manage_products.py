@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,session
 from models import db, Products, Material, ProductMaterial
+from functools import wraps
 
 # Create Blueprint for product management
 manage_products_bp = Blueprint('manage_products', __name__)
 
-@manage_products_bp.route('/manage-products')
+@manage_products_bp.route('/manage-products', methods=['POST'])
 def manage_products():
     products = Products.query.all()  # Get all products
     materials = Material.query.all()  # Get all materials
