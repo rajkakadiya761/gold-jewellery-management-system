@@ -224,9 +224,9 @@ def create_app():
         return render_template('bracelete.html', braceletes=braceletes)
      elif any(keyword in query for keyword in ['rings', 'ring', 'viti', 'finger','finger','rig']):
         rings = Products.query.filter_by(category='ring').all()
-        return render_template('bracelete.html', rings=rings)
+        return render_template('ring.html', rings=rings)
      else:
-        return "No results found."
+        return render_template('noMatches.html')
 
 
     return app
