@@ -153,10 +153,14 @@
                             Shop by category
                         </a>
                         <ul class="dropdown-menu bg-dark">
-                            <li><a class="dropdown-item text-light" href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -269,6 +273,7 @@
             {% endfor %}
         </div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 

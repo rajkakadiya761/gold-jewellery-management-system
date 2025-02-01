@@ -12,6 +12,7 @@ from earrings import product_bp
 from necklace import product_bp_necklace
 from bracelete import product_bp_bracelete
 from ring import product_bp_ring
+from feedback import manage_feedbacks
 
 
 db = db  # ORM setup
@@ -41,6 +42,7 @@ def create_app():
     app.register_blueprint(product_bp_necklace)
     app.register_blueprint(product_bp_bracelete)
     app.register_blueprint(product_bp_ring)
+    app.register_blueprint(manage_feedbacks)
 
 
     # Route for Home Page

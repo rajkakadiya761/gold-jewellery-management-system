@@ -1,5 +1,5 @@
-# models.py
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -71,4 +71,16 @@ class Material(db.Model):
 
     def __repr__(self):
         return f"<Material {self.material_name}>"
+
+
+class Feedback(db.Model):
+    feedback_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+    ratings = db.Column(db.Integer, nullable=False)  # From 1 to 5
+    message = db.Column(db.Text, nullable=False)
+    feedback_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('Users', backref='feedback')  
+    product = db.relationship('Products', backref='feedback') 
 

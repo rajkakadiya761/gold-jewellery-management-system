@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash,jsonify
 from models import db, Products,Material,ProductMaterial
 
 # Create Blueprint for product management
@@ -20,7 +20,7 @@ def show_earrings():
             
             # Get earrings that have the selected material through the ProductMaterial relation
             earrings = db.session.query(Products).join(ProductMaterial).filter(
-                Products.category == 'earring', ProductMaterial.material_id == material_id
+                Products.category == 'earrings', ProductMaterial.material_id == material_id
             ).all()
         else:
             # If no material found, show an empty list or handle as needed
@@ -51,3 +51,6 @@ def earring_details(product_id):
     # Fetch the product from the database
     earring = Products.query.get_or_404(product_id)
     return render_template('earring_details.html', earring=earring)
+
+
+
