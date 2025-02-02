@@ -29,7 +29,7 @@
 
         .carousel-inner img:hover {
             transform: scale(1.1);
-            filter: brightness(1.3);
+            filter: brightness(1);
         }
 
         .btn-custom {
@@ -320,36 +320,47 @@
 
                 // Fetch feedbacks when the page loads
                 fetchFeedbacks();
+                const submitFeedback = () => {
+                    const message = document.getElementById('feedbackMessage').value;
+                    const rating = document.getElementById('feedbackRating').value;
+                    const productId = document.getElementById('productId').value;
 
-                $('#submitFeedback').on('click', function () {
-                    const message = $('#feedbackMessage').val();
-                    console.log("Submitting feedback with message:", message, "Rating:", selectedRating, "Product ID:", product_id);
-
-                    if (!selectedRating || !message) {
+                    // Check if the message and rating are provided
+                    if (!message || !rating) {
                         alert('Please provide both rating and feedback message.');
                         return;
                     }
 
-                    $.ajax({
-                        url: '/submit_feedback',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            rating: selectedRating,
+                    // Check if user is logged in
+                    if (!sessionStorage.getItem('user_id')) {
+                        alert('You need to log in first.');
+                        return;
+                    }
+
+                    // Send feedback
+                    fetch('/submit_feedback', {
+                        method: 'POST',
+                        body: new URLSearchParams({
                             message: message,
-                            product_id: product_id
+                            rating: rating,
+                            product_id: productId
                         }),
-                        success: function (response) {
-                            alert(response.message);
-                            $('#feedbackModal').modal('hide');
-                            fetchFeedbacks();  // Refresh feedbacks after submission
-                        },
-                        error: function (xhr) {
-                            const error = JSON.parse(xhr.responseText);
-                            alert(error.error);
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
                         }
-                    });
-                });
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error); // Show error message
+                            } else {
+                                alert(data.success); // Show success message
+                            }
+                        })
+                        .catch(error => {
+                            alert('Error submitting feedback.');
+                        });
+                };
 
             });
 

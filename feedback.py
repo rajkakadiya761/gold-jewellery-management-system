@@ -69,3 +69,26 @@ def get_feedbacks(product_id):
     ]
 
     return jsonify(feedback_list)
+
+@manage_feedbacks.route('/manage-feedback', methods=['POST'])
+def manage_feedback():
+    feedbacks = Feedback.query.all()  # Fetch all feedback entries
+
+    feedback_data = []
+    for feedback in feedbacks:
+        feedback_data.append({
+            "feedback_id": feedback.feedback_id,
+            "user_id": feedback.user.user_id if feedback.user else "Unable to fetch",
+            "user_name": feedback.user.name if feedback.user else "Unknown User",
+            "Email": feedback.user.email if feedback.user else "Unknown User",
+            "product_id": feedback.product.product_id if feedback.product else "Unable to fetch",
+            "product_name": feedback.product.name if feedback.product else "Unknown Product",
+            "ratings": feedback.ratings,
+            "message": feedback.message,
+            "feedback_date": feedback.feedback_date.strftime("%Y-%m-%d")
+        })
+
+    return render_template(
+        'viewFeedback.html',
+        feedbacks=feedback_data
+    )
