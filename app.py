@@ -13,7 +13,7 @@ from necklace import product_bp_necklace
 from bracelete import product_bp_bracelete
 from ring import product_bp_ring
 from feedback import manage_feedbacks
-
+from cart import manage_Cart
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -43,6 +43,7 @@ def create_app():
     app.register_blueprint(product_bp_bracelete)
     app.register_blueprint(product_bp_ring)
     app.register_blueprint(manage_feedbacks)
+    app.register_blueprint(manage_Cart)
 
 
     # Route for Home Page
@@ -222,7 +223,7 @@ def create_app():
         necklaces = Products.query.filter_by(category='necklace').all()
         return render_template('necklace.html', necklaces=necklaces)
      elif any(keyword in query for keyword in ['braceletes', 'bracelete', 'hand wear', 'hand','breslet','bracelet']):
-        braceletes = Products.query.filter_by(category='necklace').all()
+        braceletes = Products.query.filter_by(category='bracelete').all()
         return render_template('bracelete.html', braceletes=braceletes)
      elif any(keyword in query for keyword in ['rings', 'ring', 'viti', 'finger','finger','rig']):
         rings = Products.query.filter_by(category='ring').all()

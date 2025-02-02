@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import JSON
 
 db = SQLAlchemy()
 
@@ -83,4 +84,12 @@ class Feedback(db.Model):
 
     user = db.relationship('Users', backref='feedback')  
     product = db.relationship('Products', backref='feedback') 
+    
+class Cart(db.Model):
+    __tablename__ = 'carts'
+    cart_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    product_ids = db.Column(JSON, nullable=False)  # Stores a list of product IDs
 
+    # Relationship to User
+    user = db.relationship('Users', backref=db.backref('cart', lazy=True))

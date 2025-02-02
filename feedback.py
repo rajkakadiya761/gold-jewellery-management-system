@@ -20,13 +20,6 @@ def submit_feedback():
         print("Missing required fields:", data)  # Debug log
         return jsonify({'error': 'Missing required fields'}), 400
 
-    try:
-        rating = int(rating)
-        if rating < 1 or rating > 5:
-            return jsonify({'error': 'Invalid rating'}), 400
-    except ValueError:
-        return jsonify({'error': 'Rating must be a number'}), 400
-
     # Create a new feedback entry
     feedback = Feedback(
         user_id=session['user_id'],  # Fetch logged-in user ID

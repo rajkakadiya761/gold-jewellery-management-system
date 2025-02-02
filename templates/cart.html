@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            margin-bottom: 1px;
+        }
+
+        .card {
+            background-color: rgb(33, 37, 41);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .sticky-checkout {
+            position: sticky;
+            bottom: 0;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 10;
+            color: black;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #cart-items {
+            flex-grow: 1;
+        }
+
+        .quantity {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid mt-4">
+        <h2 class="text-center">Shopping Cart</h2>
+
+        <div id="cart-items">
+            {% for item in cart_items %}
+            <div class="card p-3 mt-3" data-product-id="{{ item.product_id }}">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        <img src="{{ item.photo1 }}" class="img-fluid" alt="{{ item.name }}">
+                    </div>
+                    <div class="col-md-6 text-center text-md-start">
+                        <h5>{{ item.name }}</h5>
+                        <span class="fw-bold">₹{{ item.product_weight * 1500 }}</span>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn-outline-secondary" onclick="updateQuantity(this, -1)">-</button>
+                        <span class="quantity">1</span>
+                        <button class="btn btn-outline-secondary" onclick="updateQuantity(this, 1)">+</button>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn-outline-warning" onclick="removeItem(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning text-center" role="alert">
+                Your cart is empty.
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="sticky-checkout text-center">
+            <h4>Total: ₹<span id="total-amount">0</span></h4>
+            <button class="btn btn-warning">Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll(".card").forEach(card => {
+                let price = parseFloat(card.querySelector(".fw-bold").innerText.replace('₹', ''));
+                let quantity = parseInt(card.querySelector(".quantity").innerText);
+                total += price * quantity;
+            });
+            document.getElementById("total-amount").innerText = total.toFixed(2);
+        }
+
+        function updateQuantity(button, change) {
+            let quantityElement = button.parentElement.querySelector(".quantity");
+            let quantity = parseInt(quantityElement.innerText);
+            quantity = Math.max(1, quantity + change);
+            quantityElement.innerText = quantity;
+            updateTotal();
+        }
+
+        function removeItem(button) {
+            let card = button.closest(".card");
+            let productId = card.getAttribute("data-product-id");  // Get product ID from the card
+
+            // Send the product ID to the server to remove from the database
+            fetch(`/remove-from-cart/${productId}`, {
+                method: 'POST',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Item removed from cart") {
+                        // Remove the card from the DOM
+                        card.remove();
+                        updateTotal();
+                    } else {
+                        alert('Failed to remove item from cart');
+                    }
+                });
+        }
+
+        // Initial total calculation
+        updateTotal();
+    </script>
+
+</body>
+
+</html>

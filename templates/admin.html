@@ -168,15 +168,15 @@
     </div>
 
     <div class="main-content" id="main-content">
-        <!-- Welcome Section -->
-
-        <!-- Boxed Content - Will appear below the welcome message -->
         <div class="content-box">
-            <h5>Manage Orders</h5>
-            <p>View, manage, and track customer orders.</p>
-            <a href="/manage-orders">Go to Manage Orders</a>
+            <h5>Manage Users</h5>
+            <p>View, manage, and track user accounts.</p>
+            <a href="#" onclick="document.getElementById('manageUsersForm').submit(); return false;">Go to Manage Users</a>
+            <form id="manageUsersForm" action="/manage-users" method="POST" style="display: none;">
+            </form>
+            
         </div>
-
+        
         <div class="content-box">
             <h5>Manage Products</h5>
             <p>Add, update, and manage product listings.</p>
@@ -186,18 +186,17 @@
         </div>
 
         <div class="content-box">
-            <h5>Manage Users</h5>
-            <p>View, manage, and track user accounts.</p>
-            <a href="#" onclick="document.getElementById('manageUsersForm').submit(); return false;">Go to Manage Users</a>
-            <form id="manageUsersForm" action="/manage-users" method="POST" style="display: none;">
-            </form>
-            
-        </div>
+            <h5>Manage Orders</h5>
+            <p>View, manage, and track customer orders.</p>
+            <a href="/manage-orders">Go to Manage Orders</a>
+        </div>    
 
         <div class="content-box">
-            <h5>Manage Complaints</h5>
-            <p>View and respond to customer Complaints.</p>
-            <a href="/manage-complaints">Go to Manage Complaints</a>
+            <h5>view Feedbacks</h5>
+            <p>View customer Carts.</p>
+            <a href="#" onclick="document.getElementById('manageCartForm').submit(); return false;">Go to Carts</a>
+            <form id="manageCartForm" action="/manage-cart" method="POST" style="display: none;">
+            </form>
         </div>
 
         <div class="content-box">
@@ -207,6 +206,13 @@
             <form id="manageFeedbackForm" action="/manage-feedback" method="POST" style="display: none;">
             </form>
         </div>
+
+        <div class="content-box">
+            <h5>Manage Complaints</h5>
+            <p>View and respond to customer Complaints.</p>
+            <a href="/manage-complaints">Go to Manage Complaints</a>
+        </div>
+
     </div>
 
     <!-- Bootstrap JS -->
