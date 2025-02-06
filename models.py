@@ -4,6 +4,18 @@ from sqlalchemy import JSON
 
 db = SQLAlchemy()
 
+class HomeProduct(db.Model):
+    __tablename__ = 'homeProducts'
+
+    homeProduct_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+    
+    # Relationship definition
+    product = db.relationship('Products', backref='home_products', lazy=True)
+
+    def __repr__(self):
+        return f"<HomeProduct {self.homeProduct_id}, Product {self.product_id}>"
+    
 class Users(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)

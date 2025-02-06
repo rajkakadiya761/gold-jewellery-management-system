@@ -169,6 +169,15 @@
 
     <div class="main-content" id="main-content">
         <div class="content-box">
+            <h5>Manage Home-page</h5>
+            <p>Add, update, and manage Home-page</p>
+            <a href="#" onclick="document.getElementById('homePage').submit(); return false;">Go to Manage Home-page.</a>
+            <form id="homePage" action="/manage-homeproducts" method="POST" style="display: none;">
+            </form>
+            
+        </div>
+
+        <div class="content-box">
             <h5>Manage Users</h5>
             <p>View, manage, and track user accounts.</p>
             <a href="#" onclick="document.getElementById('manageUsersForm').submit(); return false;">Go to Manage Users</a>
@@ -192,7 +201,7 @@
         </div>    
 
         <div class="content-box">
-            <h5>view Feedbacks</h5>
+            <h5>view Customer Carts</h5>
             <p>View customer Carts.</p>
             <a href="#" onclick="document.getElementById('manageCartForm').submit(); return false;">Go to Carts</a>
             <form id="manageCartForm" action="/manage-cart" method="POST" style="display: none;">

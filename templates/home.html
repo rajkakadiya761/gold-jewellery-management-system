@@ -39,8 +39,10 @@
         }
 
         .item-image {
-            object-fit: cover;
+            overflow: hidden;
             height: 400px;
+            width: 100%;
+
             /* Set a fixed height for the images */
         }
 
@@ -76,10 +78,9 @@
         }
 
         .card {
-            height: 100%;
-            /* Make the card take full height */
+            height: 100%; 
             transition: transform 0.3s, box-shadow 0.3s;
-            /* Smooth transition for hover effects */
+
         }
 
         .card:hover {
@@ -346,122 +347,24 @@
 
     <!--all-->
     <section id="all" class="border border-secondary mt-4 mx-3">
-        <h1 class="fs-4 text-decoration-underline text-warning my-4 text-center mb-5 ">ALL JEWELLERY</h1>
+        <h1 class="fs-4 text-decoration-underline text-warning my-4 text-center mb-5">ALL JEWELLERY</h1>
         <div class="container my-4">
             <h2 class="text-center text-warning mb-4">Our Latest Collection</h2>
-            <div class="row">
-
-                <!-- Item 1 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}"
-                            class="card-img-top item-image" alt="Earring">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="hover-image"
-                            alt="Earring Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Earrings</h5>
-                            <p class="card-text text-muted">₹1,500</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}"
-                            class="card-img-top item-image" alt="Ring">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="hover-image"
-                            alt="Ring Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Ring</h5>
-                            <p class="card-text text-muted">₹2,200</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}"
-                            class="card-img-top item-image" alt="Bracelet">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="hover-image"
-                            alt="Bracelet Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Bracelet</h5>
-                            <p class="card-text text-muted">₹3,000</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}"
-                            class="card-img-top item-image" alt="Necklace">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="hover-image"
-                            alt="Necklace Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Necklace</h5>
-                            <p class="card-text text-muted">₹4,500</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 1 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}"
-                            class="card-img-top item-image" alt="Earring">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}" class="hover-image"
-                            alt="Earring Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Earrings</h5>
-                            <p class="card-text text-muted">₹1,500</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal2.jpeg') }}"
-                            class="card-img-top item-image" alt="Ring">
-                        <img src="{{ url_for('static', filename='images/carousal1.jpeg') }}" class="hover-image"
-                            alt="Ring Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Ring</h5>
-                            <p class="card-text text-muted">₹2,200</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                    <div class="card bg-light-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}"
-                            class="card-img-top item-image" alt="Bracelet">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}" class="hover-image"
-                            alt="Bracelet Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Bracelet</h5>
-                            <p class="card-text text-muted">₹3,000</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
+            <div class="row justify-content-center"> <!-- Add this class to center the cards -->
+                {% for home_product, product in home_products %}
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-warning-subtle card-container">
-                        <img src="{{ url_for('static', filename='images/carousal4.jpg') }}"
-                            class="card-img-top item-image" alt="Necklace">
-                        <img src="{{ url_for('static', filename='images/carousal3.webp') }}" class="hover-image"
-                            alt="Necklace Hover">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Necklace</h5>
-                            <p class="card-text text-muted">₹4,500</p>
-                        </div>
+                        <a href="{{ url_for('product.earring_details', product_id=product.product_id) }}" class="text-decoration-none text-white">
+                            <img src="{{ product.photo1 }}" class="item-image" alt="Jewelry">
+                            <img src="{{ product.photo2 }}" class="hover-image" alt="Earring Hover">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-muted">{{ product.name }}</h5>
+                                <p class="card-text text-muted">{{ product.product_weight }}g</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </section>

@@ -5,7 +5,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from manage_users import manage_users_bp  # Import the Blueprint
 from complaint import manage_complaints
-from models import Products, db, Users , Complaints 
+from models import HomeProduct, Products, db, Users , Complaints 
 from priceAPI import make_gapi_request
 from manage_products import manage_products_bp
 from earrings import product_bp
@@ -14,6 +14,7 @@ from bracelete import product_bp_bracelete
 from ring import product_bp_ring
 from feedback import manage_feedbacks
 from cart import manage_Cart
+from manageHome import manage_homeproducts
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -44,13 +45,15 @@ def create_app():
     app.register_blueprint(product_bp_ring)
     app.register_blueprint(manage_feedbacks)
     app.register_blueprint(manage_Cart)
+    app.register_blueprint(manage_homeproducts)
 
 
     # Route for Home Page
     @app.route("/")
     def page1():
-      metal_prices = make_gapi_request() 
-      return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'])    
+      metal_prices = make_gapi_request()
+      home_products = db.session.query(HomeProduct, Products).join(Products).all() 
+      return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)    
 
     # Login route to handle the login form submission
     @app.route('/login', methods=['POST'])
