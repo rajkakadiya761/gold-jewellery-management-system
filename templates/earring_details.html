@@ -128,17 +128,17 @@
             z-index: 1050;
         }
 
-        .notification.success {
-            background-color: #28a745;
+        .notification.warning {
+            background-color: #ffc107;
+            /* Bootstrap warning color */
+            color: black;
         }
 
         .notification.error {
-            background-color: #dc3545;
+            background-color: #64675d6f;
+            color: white;
         }
 
-        .notification.info {
-            background-color: #17a2b8;
-        }
     </style>
 </head>
 
@@ -306,25 +306,27 @@
                         }
                     });
                 });
-            });
 
 
-            $('#addToCartBtn').click(function () {
-                // Get the product ID from the button's data attribute
-                var productId = $(this).data('product-id');  // 'product-id' should match the data attribute name
+                $('#addToCartBtn').click(function () {
+                    var productId = $(this).data('product-id');  // Get product ID from button
 
-                $.ajax({
-                    url: '/add_to_cart',  // POST request to the updated route
-                    method: 'POST',
-                    data: {
-                        product_id: productId,  // Send the product ID as data in the correct format
-                    },
-                    success: function (response) {
-                        alert('Product added to cart!');
-                    },
-                    error: function (error) {
-                        alert('Failed to add product to cart!');
-                    }
+                    $.ajax({
+                        url: '/add_to_cart',
+                        method: 'POST',
+                        data: { product_id: productId },
+                        success: function (response) {
+                            showNotification(response.message, 'warning');  // Show success message
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 401) {  // User not logged in
+                                showNotification('Please log in to add items to your cart.', 'error');  // Show error message
+                                // window.location.href = '/login';  // Redirect to login page
+                            } else {
+                                showNotification('Failed to add product to cart.', 'error');  // Fallback error
+                            }
+                        }
+                    });
                 });
             });
 

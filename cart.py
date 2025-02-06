@@ -5,9 +5,8 @@ manage_Cart = Blueprint('Cart', __name__)
 
 @manage_Cart.route('/cart', methods=['GET'])
 def view_cart():
-    """Displays the shopping cart for the logged-in user in a designed template."""
     if 'user_id' not in session:
-        return render_template('home.html')  # Redirect to login page if not logged in
+        return jsonify({'success': False, 'message': 'Please log in to add items to your cart.'}), 401
 
     user_id = session['user_id']
     cart = Cart.query.filter_by(user_id=user_id).first()

@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
+    <title>Arihant Jewellers</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
     <style>
         body {
             background-color: black;
@@ -52,6 +53,7 @@
 
         <div id="cart-items">
             {% for item in cart_items %}
+            <a href="{{ url_for('product.earring_details', product_id=item.product_id) }}" class="text-decoration-none text-white">
             <div class="card p-3 mt-3" data-product-id="{{ item.product_id }}">
                 <div class="row align-items-center">
                     <div class="col-md-2 text-center">
@@ -69,13 +71,16 @@
                     <div class="col-md-2 text-center">
                         <button class="btn btn-outline-warning" onclick="removeItem(this)">Remove</button>
                     </div>
+
                 </div>
             </div>
+
             {% else %}
             <div class="alert alert-warning text-center" role="alert">
                 Your cart is empty.
             </div>
             {% endfor %}
+            </a>
         </div>
 
         <div class="sticky-checkout text-center">
