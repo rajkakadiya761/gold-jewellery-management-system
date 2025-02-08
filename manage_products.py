@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for,session
+from flask import Blueprint, render_template, request, flash, redirect, session, url_for
 from models import db, Products, Material, ProductMaterial
-from functools import wraps
 
 # Create Blueprint for product management
 manage_products_bp = Blueprint('manage_products', __name__)
@@ -47,6 +46,25 @@ def add_product():
         if not all([name, description, product_weight, size, category, photo1, photo2, material_id]):
             flash("All fields are required.", "danger")
             return redirect(url_for('manage_products.manage_products'))
+        
+        existing_product = Products.query.filter_by(
+            name=name,
+            description=description,
+            product_weight=product_weight,
+            size=size,
+            category=category,
+            photo1=photo1,
+            photo2=photo2
+        ).first()
+
+        if existing_product:
+            addret=manage_products()
+            return addret
+        
+        if float(product_weight) <= 0:  # Ensures weight is greater than 0
+           flash("Weight must be greater than zero!")
+           addret=manage_products()
+           return addret
 
         # Create and add the product
         new_product = Products(
@@ -64,11 +82,6 @@ def add_product():
         # Refresh the session to ensure product_id is updated
         db.session.refresh(new_product)
 
-        # Check if product_id is valid and log it
-        if not new_product.product_id:
-            flash("Error: Product ID not generated.", "danger")
-            return redirect(url_for('manage_products.manage_products'))
-
         print(f"New product_id: {new_product.product_id}")  # Debug log
 
         # Now add the material relationship (product_id -> material_id)
@@ -82,7 +95,10 @@ def add_product():
         db.session.rollback()
         flash(f"Error adding product: {str(e)}", "danger")
 
-    return redirect(url_for('manage_products.manage_products'))
+    addret=manage_products()
+    return addret
+
+
 
 @manage_products_bp.route('/update-product/<int:product_id>', methods=['POST'])
 def update_product(product_id):
@@ -90,12 +106,24 @@ def update_product(product_id):
         product = Products.query.get(product_id)
         if not product:
             flash("Product not found.", "danger")
-            return redirect(url_for('manage_products.manage_products'))
+            # return redirect(url_for('manage_products.manage_products'))
+            updret=manage_products()
+            return updret
+        
+        new_weight = request.form.get('product_weight', '').strip()  # Strip spaces
+
+        # Ensure new_weight is a valid number
+        if new_weight and new_weight.replace('.', '', 1).isdigit():
+            new_weight = float(new_weight)
+            if new_weight > 0:  # Only update if weight is positive
+                product.product_weight = new_weight
+            else:
+                flash("Weight cannot be zero or negative! Keeping the previous weight.", "warning")
 
         # Update product details
         product.name = request.form['name']
         product.description = request.form['description']
-        product.product_weight = request.form['product_weight']
+        # product.product_weight = request.form['product_weight']
         product.size = request.form['size']
         product.category = request.form['category']
         product.photo1 = request.form['photo1']
@@ -104,19 +132,20 @@ def update_product(product_id):
         # Update material-product relationship
         material_id = request.form['material_id']
         product_material = ProductMaterial.query.filter_by(product_id=product_id).first()
+       
         if product_material:
             product_material.material_id = material_id
         material_id = request.form.get('material_id')  # Use .get() to avoid KeyError
-        print("Received material_id:", material_id)  # Debug the material ID
-
-
+        
         db.session.commit()
         flash("Product updated successfully!", "success")
     except Exception as e:
         db.session.rollback()
         flash(f"Error updating product: {str(e)}", "danger")
 
-    return redirect(url_for('manage_products.manage_products'))
+    # return redirect(url_for('manage_products.manage_products'))
+    updret=manage_products()
+    return updret
 
 @manage_products_bp.route('/delete-product/<int:product_id>', methods=['GET'])
 def delete_product(product_id):
@@ -135,4 +164,6 @@ def delete_product(product_id):
         db.session.rollback()
         flash(f"Error deleting product: {str(e)}", "danger")
 
-    return redirect(url_for('manage_products.manage_products'))
+    # return redirect(url_for('manage_products.manage_products'))
+    dltret=manage_products()
+    return dltret

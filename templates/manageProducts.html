@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arihant Jewellers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-   
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
     <style>
-       body {
+        body {
             background-color: rgb(40, 38, 38);
             /* Black page background */
             color: white;
@@ -31,15 +32,21 @@
             /* Subtle border for the table */
         }
 
+        .table tbody {
+            background-color: #222 !important;
+            /* Apply dark gray to tbody */
+        }
+
         .table tbody tr:nth-of-type(odd) {
-            background-color: #333;
-            /* Ensure odd rows are dark gray */
+            background-color: #333 !important;
+            /* Dark gray for odd rows */
         }
 
         .table tbody tr:nth-of-type(even) {
-            background-color: #222;
-            /* Ensure even rows are dark grey */
+            background-color: #222 !important;
+            /* Darker gray for even rows */
         }
+
 
         /* Modal styling */
         .modal-content {
@@ -82,14 +89,13 @@
             /* Adjust the horizontal positioning */
             padding: 0.2rem 0.5rem;
         }
-
     </style>
-     <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
 </head>
 
 <body>
+
     <div class="container mt-5">
-        <h1 class="text-center">Manage Products</h1>
+        <h1 class="mb-4 text-center">Manage Products</h1>
         <!-- Flash Messages (Success/Error) -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -104,16 +110,18 @@
         </div>
         {% endif %}
         {% endwith %}
-
         <script>
             setTimeout(function () {
                 const flashMessages = document.getElementById('flashMessages');
                 if (flashMessages) {
-                    flashMessages.style.display = 'none'; // Hide flash messages after 10 seconds
+                    flashMessages.style.display = 'none'; 
                 }
-            }, 5000);
+            }, 3000);
         </script>
+
+
         <!-- Display Products Table -->
+
         <div class="table-responsive my-4">
             <table class="table table-bordered">
                 <thead>
@@ -144,9 +152,11 @@
                             product_material_map else 'No materials' }}
                         </td>
                         <td><img src="{{ url_for('static', filename=product.photo1) }}" alt="Photo 1"
-                                style="height: 50px;"></td>
+                                style="height: 50px;">
+                        </td>
                         <td><img src="{{ url_for('static', filename=product.photo2) }}" alt="Photo 2"
-                                style="height: 50px;"></td>
+                                style="height: 50px;">
+                        </td>
                         <td class="d-flex justify-content-between">
                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#updateProductModal{{ product.product_id }}">Update</button>
@@ -159,100 +169,101 @@
             </table>
         </div>
 
+
         <!-- Add Product Button -->
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
-
-        <!-- Add Product Modal -->
-        <div class="modal fade" id="addProductModal" tabindex="-1">
-            <div class="modal-dialog">
-                <form method="POST" action="/add-product">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Add New Product</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" name="name" class="form-control my-2" placeholder="Name">
-                            <textarea name="description" class="form-control my-2" placeholder="Description"></textarea>
-                            <input type="number" name="product_weight" class="form-control my-2" placeholder="Weight">
-                            <select name="size" required>
-                                <option value="small">Small</option>
-                                <option value="medium">Medium</option>
-                                <option value="large">Large</option>
-                            </select>
-                            <select name="category" required>
-                                <option value="ring">Ring</option>
-                                <option value="necklace">Necklace</option>
-                                <option value="earring">Earring</option>
-                                <option value="bracelet">Bracelet</option>
-                            </select>
-                            <input type="text" name="photo1" class="form-control my-2" placeholder="Photo 1 URL">
-                            <input type="text" name="photo2" class="form-control my-2" placeholder="Photo 2 URL">
-                            <select name="material_id" required>
-                                {% if materials %}
-                                {% for material in materials %}
-                                <option value="{{ material.material_id }}">{{ material.material_name }}</option>
-                                {% endfor %}
-                                {% else %}
-                                <option value="">No materials available</option>
-                                {% endif %}
-                            </select>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Add Product</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Update Product Modal -->
-        {% for product in products %}
-        <div class="modal fade" id="updateProductModal{{ product.product_id }}" tabindex="-1">
-            <div class="modal-dialog">
-                <form method="POST" action="/update-product/{{ product.product_id }}">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Update Product</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" name="name" class="form-control my-2" value="{{ product.name }}"
-                                placeholder="Name">
-                            <textarea name="description" class="form-control my-2"
-                                placeholder="Description">{{ product.description }}</textarea>
-                            <input type="number" name="product_weight" class="form-control my-2"
-                                value="{{ product.product_weight }}" step="0.01" placeholder="Weight">
-                            <input type="text" name="size" class="form-control my-2" value="{{ product.size or '' }}"
-                                placeholder="Size">
-                            <input type="text" name="category" class="form-control my-2"
-                                value="{{ product.category or '' }}" placeholder="Category">
-                            <input type="text" name="photo1" class="form-control my-2"
-                                value="{{ product.photo1 or '' }}" placeholder="Photo 1 URL">
-                            <input type="text" name="photo2" class="form-control my-2"
-                                value="{{ product.photo2 or '' }}" placeholder="Photo 2 URL">
-                            <select name="material_id" class="form-select my-2">
-                                {% for material in materials %}
-                                <option value="{{ material.material_id }}" {% if material.material_id in
-                                    product.material_ids %}selected{% endif %}>
-                                    {{ material.material_name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        {% endfor %}
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
     </div>
 
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form method="POST" action="/add-product">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control my-2" placeholder="Name">
+                        <textarea name="description" class="form-control my-2" placeholder="Description"></textarea>
+                        <input type="number" name="product_weight" class="form-control my-2" placeholder="Weight" min="0">
+                        <select name="size" required>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                        <select name="category" required>
+                            <option value="ring">Ring</option>
+                            <option value="necklace">Necklace</option>
+                            <option value="earrings">Earrings</option>
+                            <option value="bracelete">Bracelete</option>
+                        </select>
+                        <input type="text" name="photo1" class="form-control my-2" placeholder="Photo 1 URL">
+                        <input type="text" name="photo2" class="form-control my-2" placeholder="Photo 2 URL">
+                        <select name="material_id" required>
+                            {% if materials %}
+                            {% for material in materials %}
+                            <option value="{{ material.material_id }}">{{ material.material_name }}</option>
+                            {% endfor %}
+                            {% else %}
+                            <option value="">No materials available</option>
+                            {% endif %}
+                        </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Add Product</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Product Modal -->
+    {% for product in products %}
+    <div class="modal fade" id="updateProductModal{{ product.product_id }}" tabindex="-1">
+        <div class="modal-dialog">
+            <form method="POST" action="/update-product/{{ product.product_id }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control my-2" value="{{ product.name }}"
+                            placeholder="Name">
+                        <textarea name="description" class="form-control my-2"
+                            placeholder="Description">{{ product.description }}</textarea>
+                        <input type="number" name="product_weight" class="form-control my-2"
+                            value="{{ product.product_weight }}" step="0.01" placeholder="Weight" min="0">
+                        <input type="text" name="size" class="form-control my-2" value="{{ product.size or '' }}"
+                            placeholder="Size">
+                        <input type="text" name="category" class="form-control my-2"
+                            value="{{ product.category or '' }}" placeholder="Category">
+                        <input type="text" name="photo1" class="form-control my-2" value="{{ product.photo1 or '' }}"
+                            placeholder="Photo 1 URL">
+                        <input type="text" name="photo2" class="form-control my-2" value="{{ product.photo2 or '' }}"
+                            placeholder="Photo 2 URL">
+                        <select name="material_id" class="form-select my-2">
+                            {% for material in materials %}
+                            <option value="{{ material.material_id }}" {% if material.material_id in
+                                product.material_ids %}selected{% endif %}>
+                                {{ material.material_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

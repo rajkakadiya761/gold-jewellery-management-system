@@ -133,8 +133,9 @@
             </tbody>
         </table>
 
-    <!-- Add Home Product Button -->
-    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addHomeProductModal">Add Product</button>
+        <!-- Add Home Product Button -->
+        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addHomeProductModal">Add
+            Product</button>
     </div>
     <!-- Modal for Adding Home Product -->
     <div class="modal fade" id="addHomeProductModal" tabindex="-1" aria-labelledby="addHomeProductModalLabel"
@@ -145,13 +146,16 @@
                     <h5 class="modal-title" id="addHomeProductModalLabel">Add Home Product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="POST" action="{{ url_for('homeproduct.add_homeproduct') }}">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="product_id" class="form-label">Product ID</label>
-                            <input type="number" name="product_id" id="product_id" class="form-control" required>
-                        </div>
-                    </div>
+                <form action="{{ url_for('homeproduct.add_homeproduct') }}" method="POST">
+                    <label for="product_id">Select Product:</label>
+                    <select name="product_id" id="product_id" class="form-control">
+                        <option value="" selected disabled>Select a product</option> <!-- Default option -->
+                        {% for product in products %}
+                        <option value="{{ product.product_id }}">{{ product.name }} (ID: {{ product.product_id }})
+                        </option>
+                        {% endfor %}
+                    </select>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Add Home Product</button>
@@ -175,8 +179,13 @@
                     <div class="modal-body">
                         <input type="hidden" name="homeProduct_id" id="modalHomeProductId">
                         <div class="mb-3">
-                            <label for="product_id" class="form-label">Product ID</label>
-                            <input type="number" name="product_id" id="modalProductId" class="form-control" required>
+                            <label for="product_id" class="form-label">Select Product</label>
+                            <select name="product_id" id="modalProductId" class="form-control" required>
+                                <option value="" disabled>Select a product</option> <!-- Default Option -->
+                                {% for product in products %}
+                                <option value="{{ product.product_id }}">{{ product.name }} (ID: {{ product.product_id }})</option>
+                                {% endfor %}
+                            </select>                            
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -187,6 +196,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Bootstrap 5 JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
