@@ -138,6 +138,9 @@
             background-color: #64675d6f;
             color: white;
         }
+        .dropdown-item:hover {
+            background-color: rgb(78, 65, 48);
+        }
     </style>
 </head>
 
@@ -189,6 +192,52 @@
                         <option value="{{ size }}">{{ size.capitalize() }}</option>
                         {% endfor %}
                     </select>
+
+                    <!-- Add this inside the Right Section of Product Details -->
+                    <div class="mt-3">
+                        <a href="#" id="sizeChartLink" class="text-decoration-underline text-light text-warning">Size Chart</a>
+                    </div>
+
+                    <!-- Size Chart Modal -->
+                    <div class="modal fade" id="sizeChartModal" tabindex="-1" aria-labelledby="sizeChartModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="sizeChartModalLabel">Size Chart</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <img id="sizeChartImage" src="" class="img-fluid" alt="Size Chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function () {
+                            $('#sizeChartLink').click(function (event) {
+                                event.preventDefault(); // Prevent default anchor behavior
+
+                                let category = "{{ earring.category }}"; // Get category dynamically
+
+                                let sizeChartSrc = "";
+                                if (category.includes("earrings")) {
+                                    sizeChartSrc = "{{ url_for('static', filename='images/earring-size-chart1.jpg') }}";
+                                } else if (category.includes("necklace")) {
+                                    sizeChartSrc = "{{ url_for('static', filename='images/necklace-size-chart.jpg') }}";
+                                } else if(category.includes("ring"))  {
+                                    sizeChartSrc = "{{ url_for('static', filename='images/Size-Chart-Ring.jpg') }}";
+                                }else{
+                                    sizeChartSrc = "{{ url_for('static', filename='images/bracelet-size-chart.png') }}";
+                                  }
+                                $("#sizeChartImage").attr("src", sizeChartSrc);
+                                $("#sizeChartModal").modal("show");
+                            });
+                        });
+                    </script>
+
 
                     <br>
                     <div class="col-6">
