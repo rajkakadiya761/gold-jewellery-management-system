@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 12, 2025 at 10:18 PM
+-- Generation Time: Feb 09, 2025 at 10:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -24,47 +24,53 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `carts`
 --
 
-CREATE TABLE `users` (
-  `User_ID` int(10) NOT NULL,
-  `Name` varchar(100) NOT NULL,
-  `Email` varchar(150) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `Role` varchar(20) NOT NULL,
-  `is_confirmed` tinyint(1) NOT NULL DEFAULT 0
+CREATE TABLE `carts` (
+  `cart_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`product_ids`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `carts`
 --
 
-INSERT INTO `users` (`User_ID`, `Name`, `Email`, `Password`, `Role`, `is_confirmed`) VALUES
-(1, 'Krisha', 'krisha4801@gmail.com', 'krisha', 'Admin', 1),
-(2, 'rahul', 'rahul@gmail.com', 'rahul', 'Customer', 0),
-(10, 'Rahul Kaushikbhai', 'rahulkshah00@gmail.com', 'rohan', 'Customer', 1);
+INSERT INTO `carts` (`cart_id`, `user_id`, `product_ids`) VALUES
+(3, 2, '\"13,2,1,3,12\"'),
+(4, 13, '\"13\"');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `users`
+-- Indexes for table `carts`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`User_ID`),
-  ADD UNIQUE KEY `Email` (`Email`);
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `carts`
 --
-ALTER TABLE `users`
-  MODIFY `User_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `carts`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `carts`
+--
+ALTER TABLE `carts`
+  ADD CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`User_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

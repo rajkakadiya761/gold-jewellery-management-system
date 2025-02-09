@@ -114,7 +114,7 @@
             setTimeout(function () {
                 const flashMessages = document.getElementById('flashMessages');
                 if (flashMessages) {
-                    flashMessages.style.display = 'none'; 
+                    flashMessages.style.display = 'none';
                 }
             }, 3000);
         </script>
@@ -130,7 +130,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Weight (g)</th>
-                        <th>Size</th>
+                        <th>Sizes</th>
                         <th>Category</th>
                         <th>Material</th>
                         <th>Photo 1</th>
@@ -145,7 +145,7 @@
                         <td>{{ product.name }}</td>
                         <td>{{ product.description }}</td>
                         <td>{{ product.product_weight }}</td>
-                        <td>{{ product.size }}</td>
+                        <td>{{ product.sizes }}</td>
                         <td>{{ product.category }}</td>
                         <td>
                             {{ product_material_map[product.product_id] | join(', ') if product.product_id in
@@ -171,7 +171,7 @@
 
 
         <!-- Add Product Button -->
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
     </div>
 
     <!-- Add Product Modal -->
@@ -186,12 +186,21 @@
                     <div class="modal-body">
                         <input type="text" name="name" class="form-control my-2" placeholder="Name">
                         <textarea name="description" class="form-control my-2" placeholder="Description"></textarea>
-                        <input type="number" name="product_weight" class="form-control my-2" placeholder="Weight" min="0">
-                        <select name="size" required>
-                            <option value="small">Small</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large</option>
-                        </select>
+                        <input type="number" name="product_weight" class="form-control my-2" placeholder="Weight"
+                            min="0">
+                        <div class="mb-3">
+                            <label class="form-label">Size</label><br>
+
+                            <input type="checkbox" name="sizes" value="small" id="sizeSmall">
+                            <label for="sizeSmall">Small</label>
+
+                            <input type="checkbox" name="sizes" value="medium" id="sizeMedium">
+                            <label for="sizeMedium">Medium</label>
+
+                            <input type="checkbox" name="sizes" value="large" id="sizeLarge">
+                            <label for="sizeLarge">Large</label>
+                        </div>
+
                         <select name="category" required>
                             <option value="ring">Ring</option>
                             <option value="necklace">Necklace</option>
@@ -237,8 +246,21 @@
                             placeholder="Description">{{ product.description }}</textarea>
                         <input type="number" name="product_weight" class="form-control my-2"
                             value="{{ product.product_weight }}" step="0.01" placeholder="Weight" min="0">
-                        <input type="text" name="size" class="form-control my-2" value="{{ product.size or '' }}"
-                            placeholder="Size">
+                        <div class="mb-3">
+                            <label class="form-label">Size</label><br>
+
+                            <input type="checkbox" name="sizes" value="small" id="sizeSmall" {% if 'small' in
+                                product.sizes.split(',') %}checked{% endif %}>
+                            <label for="sizeSmall">Small</label>
+
+                            <input type="checkbox" name="sizes" value="medium" id="sizeMedium" {% if 'medium' in
+                                product.sizes.split(',') or not product.sizes %}checked{% endif %}>
+                            <label for="sizeMedium">Medium</label>
+
+                            <input type="checkbox" name="sizes" value="large" id="sizeLarge" {% if 'large' in
+                                product.sizes.split(',') %}checked{% endif %}>
+                            <label for="sizeLarge">Large</label>
+                        </div>
                         <input type="text" name="category" class="form-control my-2"
                             value="{{ product.category or '' }}" placeholder="Category">
                         <input type="text" name="photo1" class="form-control my-2" value="{{ product.photo1 or '' }}"

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2025 at 08:23 PM
+-- Generation Time: Feb 09, 2025 at 10:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -43,7 +43,14 @@ CREATE TABLE `feedback` (
 INSERT INTO `feedback` (`feedback_id`, `user_id`, `product_id`, `message`, `feedback_date`, `ratings`) VALUES
 (1, 2, 1, 'Great product!', '2025-02-01', 5),
 (2, 2, 12, 'Average quality', '2025-02-02', 3),
-(13, 2, 1, 'bfdvbfdbfd', '2025-02-01', 3);
+(3, 2, 1, 'bfdvbfdbfd', '2025-02-01', 3),
+(4, 2, 2, 'good job at building the website !! proud of you.', '2025-02-02', 5),
+(17, 2, 2, 'one more done', '2025-02-02', 3),
+(18, 2, 2, 'bgfdbvfb', '2025-02-02', 4),
+(19, 2, 13, 'csdcds', '2025-02-02', 4),
+(20, 2, 13, 'hobuo', '2025-02-02', 3),
+(21, 2, 13, 'beautiful ring', '2025-02-02', 5),
+(22, 13, 13, 'nice one', '2025-02-08', 4);
 
 --
 -- Indexes for dumped tables
@@ -65,7 +72,7 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `feedback_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables

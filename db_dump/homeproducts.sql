@@ -24,42 +24,55 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `materials`
+-- Table structure for table `homeproducts`
 --
 
-CREATE TABLE `materials` (
-  `material_id` int(11) NOT NULL,
-  `material_name` varchar(50) NOT NULL
+CREATE TABLE `homeproducts` (
+  `homeProduct_id` int(11) NOT NULL,
+  `product_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `materials`
+-- Dumping data for table `homeproducts`
 --
 
-INSERT INTO `materials` (`material_id`, `material_name`) VALUES
-(1, 'Gold'),
-(2, 'Silver'),
-(3, 'Platinum');
+INSERT INTO `homeproducts` (`homeProduct_id`, `product_id`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(13, 12),
+(7, 13);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `materials`
+-- Indexes for table `homeproducts`
 --
-ALTER TABLE `materials`
-  ADD PRIMARY KEY (`material_id`);
+ALTER TABLE `homeproducts`
+  ADD PRIMARY KEY (`homeProduct_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `materials`
+-- AUTO_INCREMENT for table `homeproducts`
 --
-ALTER TABLE `materials`
-  MODIFY `material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `homeproducts`
+  MODIFY `homeProduct_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `homeproducts`
+--
+ALTER TABLE `homeproducts`
+  ADD CONSTRAINT `homeproducts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

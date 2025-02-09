@@ -43,10 +43,7 @@ class Products(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(150), nullable=False)
     product_weight = db.Column(db.Float, nullable=False)
-    size = db.Column(
-        db.Enum('small', 'medium', 'large', name='size_enum'),
-        nullable=False
-    )
+    sizes = db.Column(db.String(50), nullable=False)  
     category = db.Column(
         db.Enum('ring', 'necklace', 'earrings', 'bracelete', name='category_enum'),
         nullable=False

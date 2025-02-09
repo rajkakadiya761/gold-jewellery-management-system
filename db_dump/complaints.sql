@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2025 at 06:39 PM
+-- Generation Time: Feb 09, 2025 at 10:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -41,7 +41,8 @@ CREATE TABLE `complaints` (
 --
 
 INSERT INTO `complaints` (`complaint_id`, `user_id`, `message`, `status`, `type`, `created_at`) VALUES
-(1, 2, 'The packaging was damaged', 'inprocess', 'delivery', '2025-01-28 13:06:54');
+(1, 2, 'The packaging was damaged', 'inprocess', 'delivery', '2025-01-28 13:06:54'),
+(4, 2, 'product was broekn', 'inprocess', 'product', '2025-02-02 20:59:46');
 
 --
 -- Indexes for dumped tables
@@ -62,7 +63,7 @@ ALTER TABLE `complaints`
 -- AUTO_INCREMENT for table `complaints`
 --
 ALTER TABLE `complaints`
-  MODIFY `complaint_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `complaint_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

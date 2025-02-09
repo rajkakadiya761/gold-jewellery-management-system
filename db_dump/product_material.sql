@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2025 at 06:40 PM
+-- Generation Time: Feb 09, 2025 at 10:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -39,8 +39,11 @@ CREATE TABLE `product_material` (
 
 INSERT INTO `product_material` (`product_material_id`, `product_id`, `material_id`) VALUES
 (1, 1, 3),
-(2, 2, 1),
-(3, 3, 2);
+(2, 2, 3),
+(3, 3, 2),
+(6, 12, 2),
+(7, 13, 1),
+(8, 14, 1);
 
 --
 -- Indexes for dumped tables
@@ -62,7 +65,7 @@ ALTER TABLE `product_material`
 -- AUTO_INCREMENT for table `product_material`
 --
 ALTER TABLE `product_material`
-  MODIFY `product_material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `product_material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Constraints for dumped tables

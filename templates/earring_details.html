@@ -138,7 +138,6 @@
             background-color: #64675d6f;
             color: white;
         }
-
     </style>
 </head>
 
@@ -186,10 +185,11 @@
                     <label for="sizeSelect" class="form-label">Select Size:</label>
                     <select class="form-select w-50" id="sizeSelect"
                         style="background-color: black; color: white; border: 1px solid grey;">
-                        <option value="Small">Small</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large">Large</option>
+                        {% for size in earring.sizes.split(',') %}
+                        <option value="{{ size }}">{{ size.capitalize() }}</option>
+                        {% endfor %}
                     </select>
+
                     <br>
                     <div class="col-6">
                         <label for="quantity" class="form-label">Quantity:</label>

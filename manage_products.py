@@ -37,13 +37,17 @@ def add_product():
         name = request.form['name']
         description = request.form['description']
         product_weight = request.form['product_weight']
-        size = request.form['size']
         category = request.form['category']
         photo1 = request.form['photo1']
         photo2 = request.form['photo2']
         material_id = request.form['material_id']
+        sizes = request.form.getlist('sizes')  # Get all checked values
+        if not sizes:
+            sizes = ["medium"]
+
+        size_str = ",".join(sizes)
         
-        if not all([name, description, product_weight, size, category, photo1, photo2, material_id]):
+        if not all([name, description, product_weight, size_str, category, photo1, photo2, material_id]):
             flash("All fields are required.", "danger")
             return redirect(url_for('manage_products.manage_products'))
         
@@ -51,7 +55,7 @@ def add_product():
             name=name,
             description=description,
             product_weight=product_weight,
-            size=size,
+            sizes=size_str,
             category=category,
             photo1=photo1,
             photo2=photo2
@@ -71,7 +75,7 @@ def add_product():
             name=name,
             description=description,
             product_weight=product_weight,
-            size=size,
+            sizes=size_str,
             category=category,
             photo1=photo1,
             photo2=photo2
@@ -123,8 +127,7 @@ def update_product(product_id):
         # Update product details
         product.name = request.form['name']
         product.description = request.form['description']
-        # product.product_weight = request.form['product_weight']
-        product.size = request.form['size']
+        product.product_weight = request.form['product_weight']
         product.category = request.form['category']
         product.photo1 = request.form['photo1']
         product.photo2 = request.form['photo2']
@@ -133,6 +136,12 @@ def update_product(product_id):
         material_id = request.form['material_id']
         product_material = ProductMaterial.query.filter_by(product_id=product_id).first()
        
+        selected_sizes = request.form.getlist('sizes')  # Ensure correct name is used
+        if not selected_sizes:
+            selected_sizes = ["medium"]
+
+        product.sizes = ",".join(selected_sizes)  # Convert list to string
+        
         if product_material:
             product_material.material_id = material_id
         material_id = request.form.get('material_id')  # Use .get() to avoid KeyError

@@ -53,6 +53,7 @@ def create_app():
     def page1():
       metal_prices = make_gapi_request()
       home_products = db.session.query(HomeProduct, Products).join(Products).all() 
+    #   print("Home Products Data:", home_products)  
       return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)    
 
     # Login route to handle the login form submission
@@ -80,8 +81,9 @@ def create_app():
                 flash(link, "danger")
         else:
             flash("Login Failed! Invalid email or password.", "danger")  # Flash error message
-        
-        return render_template("home.html")  # Stay on the same page and display the flash message
+        homret=page1()
+        return homret
+        # return render_template("home.html")  # Stay on the same page and display the flash message
     
     @app.route('/forgot-password', methods=['GET'])
     def forgotPassword():
@@ -100,7 +102,9 @@ def create_app():
             flash("Please confirm forget password link sent to your email", "success")
         except Exception as e:
             print(f"Error sending email: {e}") 
-        return render_template("home.html")
+        homret=page1()
+        return homret
+        # return render_template("home.html")
 
     @app.route('/resend-confirmation')
     def resend_confirmation():
@@ -110,7 +114,9 @@ def create_app():
             flash("Verification email has been sent.", "success")
         else:
             flash("Invalid email address.", "danger")
-        return render_template("home.html")  # Redirect or render an appropriate template
+        homret=page1()
+        return homret
+        # return render_template("home.html")  # Redirect or render an appropriate template
 
     # Generate a secure token
     def generate_confirmation_token(email):
@@ -143,7 +149,9 @@ def create_app():
         existing_user = Users.query.filter_by(email=email).first()
         if existing_user:
             flash("Email already exists. Please use a different email.", "danger")
-            return render_template("home.html")
+            homret=page1()
+            return homret
+            # return render_template("home.html")
 
         # Create a new user
         new_user = Users(name=name, email=email, password=password, role="Customer")
@@ -153,7 +161,9 @@ def create_app():
         # Send confirmation email
         send_confirmation_email(email)
         flash("Signup successful! Please check your email to confirm your account.", "success")
-        return render_template("home.html")
+        homret=page1()
+        return homret
+        # return render_template("home.html")
 
     # Confirm a token and decode the email
     def confirm_token(token, expiration=3600):
@@ -190,13 +200,17 @@ def create_app():
             flash("Your email has been confirmed! You can now log in.", "success")
         else:
             flash("User not found.", "danger")
-        return render_template("home.html")
+        homret=page1()
+        return homret
+        # return render_template("home.html")
     
     @app.route('/logout', methods=['POST'])
     def logout():
        session.pop('user_id', None)  # Remove user_id from session
        flash('You have been logged out.Visit us again. Thankyou!!', 'success')
-       return render_template('home.html')
+       homret=page1()
+       return homret
+    #    return render_template('home.html')
 
         
     @app.route('/reset-password', methods=['POST'])
@@ -213,7 +227,9 @@ def create_app():
             flash("Your password has been updated successfully!", "success")
         else:
             flash("User not found.", "danger")
-        return render_template("home.html")
+        homret=page1()
+        return homret
+        # return render_template("home.html")
 
     @app.route('/search', methods=['GET'])
     def search():

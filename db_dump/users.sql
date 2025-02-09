@@ -24,42 +24,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `materials`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `materials` (
-  `material_id` int(11) NOT NULL,
-  `material_name` varchar(50) NOT NULL
+CREATE TABLE `users` (
+  `User_ID` int(10) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Email` varchar(150) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  `Role` varchar(20) NOT NULL,
+  `is_confirmed` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `materials`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `materials` (`material_id`, `material_name`) VALUES
-(1, 'Gold'),
-(2, 'Silver'),
-(3, 'Platinum');
+INSERT INTO `users` (`User_ID`, `Name`, `Email`, `Password`, `Role`, `is_confirmed`) VALUES
+(1, 'Krisha', 'krisha4801@gmail.com', 'krisha', 'Admin', 1),
+(2, 'rahul', 'rahulkshah00@gmail.com', 'rahul', 'Customer', 1),
+(13, 'rupal', 'rupalshah053@gmail.com', 'rupal', 'Customer', 1);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `materials`
+-- Indexes for table `users`
 --
-ALTER TABLE `materials`
-  ADD PRIMARY KEY (`material_id`);
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`User_ID`),
+  ADD UNIQUE KEY `Email` (`Email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `materials`
+-- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `materials`
-  MODIFY `material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `users`
+  MODIFY `User_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

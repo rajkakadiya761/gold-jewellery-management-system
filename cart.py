@@ -1,12 +1,15 @@
 from flask import Blueprint, render_template, flash, request, session, jsonify,redirect, url_for
-from models import db,Users,Products,Cart
+from models import db,Users,Products,Cart,HomeProduct
 
 manage_Cart = Blueprint('Cart', __name__)
 
 @manage_Cart.route('/cart', methods=['GET'])
 def view_cart():
     if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'Please log in to add items to your cart.'}), 401
+        # return jsonify({'success': False, 'message': 'Please log in to add items to your cart.'}), 401
+        flash('Please log in to add items to your cart')
+        home_products = db.session.query(HomeProduct, Products).join(Products).all() 
+        return render_template("home.html", home_products=home_products)  
 
     user_id = session['user_id']
     cart = Cart.query.filter_by(user_id=user_id).first()

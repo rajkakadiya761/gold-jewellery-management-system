@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for,session
-from models import db, Complaints
+from models import db, Complaints,Products,HomeProduct
 
 manage_complaints = Blueprint('complaint', __name__)
 
@@ -7,7 +7,8 @@ manage_complaints = Blueprint('complaint', __name__)
 def file_complaint():
     if 'user_id' not in session:
         flash("You must be logged in to file a complaint", "danger")
-        return render_template('home.html')
+        home_products = db.session.query(HomeProduct, Products).join(Products).all() 
+        return render_template("home.html", home_products=home_products)  
 
     if request.method == 'POST':
         user_id = session['user_id']
@@ -19,7 +20,8 @@ def file_complaint():
         db.session.commit()
 
         flash("Complaint filed successfully!", "success")    
-        return render_template('home.html')
+        home_products = db.session.query(HomeProduct, Products).join(Products).all() 
+        return render_template("home.html", home_products=home_products)  
 
 # Route to display complaints in the admin panel
 @manage_complaints.route('/manage-complaints')
