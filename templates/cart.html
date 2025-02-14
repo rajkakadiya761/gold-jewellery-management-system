@@ -49,8 +49,7 @@
 <body>
 
     <div class="container-fluid mt-4">
-        <h2 class="text-center">Shopping Cart</h2>
-
+        <h2 class="text-center mb-4">🛒 Shopping Cart</h2>
         <div id="cart-items">
             {% for item in cart_items %}
             <a href="{{ url_for('product.earring_details', product_id=item.product_id) }}" class="text-decoration-none text-white">
@@ -61,7 +60,7 @@
                     </div>
                     <div class="col-md-6 text-center text-md-start">
                         <h5>{{ item.name }}</h5>
-                        <span class="fw-bold">₹{{ item.product_weight * 1500 }}</span>
+                        <span class="fw-bold">₹{{ item.price }}</span>
                     </div>
                     <div class="col-md-2 text-center">
                         <button class="btn btn-outline-secondary" onclick="updateQuantity(this, -1)">-</button>

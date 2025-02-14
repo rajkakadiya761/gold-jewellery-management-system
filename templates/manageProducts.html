@@ -130,7 +130,9 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Weight (g)</th>
+                        <th>Price</th>
                         <th>Sizes</th>
+                        <th>Quantity</th>
                         <th>Category</th>
                         <th>Material</th>
                         <th>Photo 1</th>
@@ -145,7 +147,9 @@
                         <td>{{ product.name }}</td>
                         <td>{{ product.description }}</td>
                         <td>{{ product.product_weight }}</td>
+                        <td>{{ product.price }}</td>
                         <td>{{ product.sizes }}</td>
+                        <td>{{ product.quantity }}</td>
                         <td>{{ product.category }}</td>
                         <td>
                             {{ product_material_map[product.product_id] | join(', ') if product.product_id in
@@ -184,12 +188,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" name="name" class="form-control my-2" placeholder="Name">
-                        <textarea name="description" class="form-control my-2" placeholder="Description"></textarea>
-                        <input type="number" name="product_weight" class="form-control my-2" placeholder="Weight"
+                        Name:<input type="text" name="name" class="form-control my-2" placeholder="Name">
+                        Description:<textarea name="description" class="form-control my-2" placeholder="Description"></textarea>
+                        Weight:<input type="number" name="product_weight" class="form-control my-2" placeholder="Weight"
                             min="0">
                         <div class="mb-3">
-                            <label class="form-label">Size</label><br>
+                            <label class="form-label">Size:</label><br>
 
                             <input type="checkbox" name="sizes" value="small" id="sizeSmall">
                             <label for="sizeSmall">Small</label>
@@ -201,15 +205,19 @@
                             <label for="sizeLarge">Large</label>
                         </div>
 
-                        <select name="category" required>
+                        Category: <select name="category" required>
                             <option value="ring">Ring</option>
                             <option value="necklace">Necklace</option>
                             <option value="earrings">Earrings</option>
                             <option value="bracelete">Bracelete</option>
                         </select>
-                        <input type="text" name="photo1" class="form-control my-2" placeholder="Photo 1 URL">
-                        <input type="text" name="photo2" class="form-control my-2" placeholder="Photo 2 URL">
-                        <select name="material_id" required>
+                        <br><br>
+                        Quantity:<input type="number" name="quantity" class="form-control my-2" placeholder="Quantity"
+                        min="0">
+
+                        photo1:<input type="text" name="photo1" class="form-control my-2" placeholder="Photo 1 URL">
+                        photo2:<input type="text" name="photo2" class="form-control my-2" placeholder="Photo 2 URL">
+                        Material: <select name="material_id" required>
                             {% if materials %}
                             {% for material in materials %}
                             <option value="{{ material.material_id }}">{{ material.material_name }}</option>
@@ -240,14 +248,18 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" name="name" class="form-control my-2" value="{{ product.name }}"
+                        Name:<input type="text" name="name" class="form-control my-2" value="{{ product.name }}"
                             placeholder="Name">
-                        <textarea name="description" class="form-control my-2"
+                        Description:<textarea name="description" class="form-control my-2"
                             placeholder="Description">{{ product.description }}</textarea>
-                        <input type="number" name="product_weight" class="form-control my-2"
+                        Weigth:<input type="number" name="product_weight" class="form-control my-2"
                             value="{{ product.product_weight }}" step="0.01" placeholder="Weight" min="0">
+
+                        Quantity:<input type="number" name="quantity" class="form-control my-2"
+                            value="{{ product.quantity or 0 }}" min="0" placeholder="Quantity">
+    
                         <div class="mb-3">
-                            <label class="form-label">Size</label><br>
+                            <label class="form-label">Size:</label><br>
 
                             <input type="checkbox" name="sizes" value="small" id="sizeSmall" {% if 'small' in
                                 product.sizes.split(',') %}checked{% endif %}>
@@ -261,11 +273,11 @@
                                 product.sizes.split(',') %}checked{% endif %}>
                             <label for="sizeLarge">Large</label>
                         </div>
-                        <input type="text" name="category" class="form-control my-2"
+                        Category:<input type="text" name="category" class="form-control my-2"
                             value="{{ product.category or '' }}" placeholder="Category">
-                        <input type="text" name="photo1" class="form-control my-2" value="{{ product.photo1 or '' }}"
+                        photo1:<input type="text" name="photo1" class="form-control my-2" value="{{ product.photo1 or '' }}"
                             placeholder="Photo 1 URL">
-                        <input type="text" name="photo2" class="form-control my-2" value="{{ product.photo2 or '' }}"
+                        photo2:<input type="text" name="photo2" class="form-control my-2" value="{{ product.photo2 or '' }}"
                             placeholder="Photo 2 URL">
                         <select name="material_id" class="form-select my-2">
                             {% for material in materials %}

@@ -1,28 +1,47 @@
 from flask import Blueprint, render_template, flash, request, session, jsonify,redirect, url_for
-from models import db,Users,Products,Cart,HomeProduct
+from models import ProductPricing, db,Users,Products,Cart,HomeProduct
 
 manage_Cart = Blueprint('Cart', __name__)
 
 @manage_Cart.route('/cart', methods=['GET'])
 def view_cart():
     if 'user_id' not in session:
-        # return jsonify({'success': False, 'message': 'Please log in to add items to your cart.'}), 401
         flash('Please log in to add items to your cart')
-        home_products = db.session.query(HomeProduct, Products).join(Products).all() 
-        return render_template("home.html", home_products=home_products)  
+        home_products = db.session.query(HomeProduct, Products).join(Products).all()
+        return render_template("home.html", home_products=home_products)
 
     user_id = session['user_id']
     cart = Cart.query.filter_by(user_id=user_id).first()
-    
-    if cart:
-        # Fetch product details for each product_id in the cart
+
+    if cart and cart.product_ids:
+        # Convert comma-separated product IDs to a list
         product_ids = cart.product_ids.split(',')
-        products = Products.query.filter(Products.product_id.in_(product_ids)).all()
-        
-        # Pass the products to the template
-        return render_template('cart.html', cart_items=products)
+
+        # Fetch product details along with their prices and quantities
+        cart_items = (
+            db.session.query(Products, ProductPricing)
+            .join(ProductPricing, Products.product_id == ProductPricing.product_id)
+            .filter(Products.product_id.in_(product_ids))
+            .all()
+        )
+
+        # Prepare the data for rendering
+        items_with_details = [
+            {
+                "product_id": product.product_id,
+                "name": product.name,
+                "description": product.description,
+                "photo1": product.photo1,
+                "price": pricing.price,
+                "quantity": pricing.quantity,
+            }
+            for product, pricing in cart_items
+        ]
+
+        return render_template('cart.html', cart_items=items_with_details)
     else:
-        return render_template('cart.html', cart_items=[])  # Render with an empty cart
+        return render_template('cart.html', cart_items=[])
+
 
 
 @manage_Cart.route('/add_to_cart', methods=['POST'])

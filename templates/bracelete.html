@@ -74,9 +74,11 @@
         }
 
         .item-image {
+            overflow: hidden;
             height: 300px;
             width: 100%;
-            object-fit: cover;
+
+            /* Set a fixed height for the images */
         }
 
         .card-content {
@@ -134,7 +136,7 @@
             background-color: #333;
             color: white;
             border-radius: 5px;
-        
+
         }
 
         .notification.warning {
@@ -174,9 +176,12 @@
                         <ul class="dropdown-menu bg-dark">
                             <li><a class="dropdown-item text-light"
                                     href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -269,7 +274,7 @@
         </script>
         <div class="row">
             {% for bracelete in braceletes %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                 <div class="card-container">
                     <a href="{{ url_for('productHand.bracelete_details', product_id=bracelete.product_id) }}"
                         class="text-decoration-none text-white">
@@ -279,7 +284,8 @@
                             <p>{{ bracelete.product_weight }}g</p>
                         </div>
                     </a>
-                    <div class="add-to-cart" id="addToCartBtn" data-product-id="{{ bracelete.product_id }}">Add to Cart</div>
+                    <div class="add-to-cart" id="addToCartBtn" data-product-id="{{ bracelete.product_id }}">Add to Cart
+                    </div>
                     <form action="{{ url_for('productHand.delete_bracelete', product_id=bracelete.product_id) }}"
                         method="POST">
                         <button type="submit" class="delete-btn">Delete</button>
@@ -288,7 +294,9 @@
             </div>
             {% endfor %}
         </div>
-        <div class="notification" style="top: 10.5vh; right: 1.5vw; z-index: 1000; display: none; padding: 10px; border-radius: 5px;" id="notificationMessage"></div>
+        <div class="notification"
+            style="top: 10.5vh; right: 1.5vw; z-index: 1000; display: none; padding: 10px; border-radius: 5px;"
+            id="notificationMessage"></div>
     </div>
     <script>
         $(document).on('click', '.add-to-cart', function () {
@@ -321,7 +329,7 @@
             });
         });
     </script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 

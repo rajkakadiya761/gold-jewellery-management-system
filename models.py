@@ -81,6 +81,17 @@ class Material(db.Model):
 
     def __repr__(self):
         return f"<Material {self.material_name}>"
+    
+class ProductPricing(db.Model):
+    __tablename__ = 'productPricing'
+
+    price_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+    price = db.Column(db.Float, nullable=False)  # Stores the price
+    quantity = db.Column(db.Integer, nullable=False)  # Stores the available stock
+   
+    # Relationship to fetch product details when needed
+    product = db.relationship('Products', backref=db.backref('pricing', uselist=False, cascade="all, delete-orphan"))
 
 
 class Feedback(db.Model):

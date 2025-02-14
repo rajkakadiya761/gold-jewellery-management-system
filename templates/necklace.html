@@ -75,11 +75,12 @@
         }
 
         .item-image {
+            overflow: hidden;
             height: 300px;
             width: 100%;
-            object-fit: cover;
-        }
 
+            /* Set a fixed height for the images */
+        }
         .card-content {
             text-align: left;
             width: 100%;
@@ -272,7 +273,7 @@
         </script>
         <div class="row">
             {% for necklace in necklaces %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                 <div class="card-container">
                     <a href="{{ url_for('productNeck.necklace_details', product_id=necklace.product_id) }}"
                         class="text-decoration-none text-white">

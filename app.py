@@ -3,10 +3,10 @@ from markupsafe import Markup
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
-from manage_users import manage_users_bp  # Import the Blueprint
+from manage_users import manage_users_bp  
 from complaint import manage_complaints
-from models import HomeProduct, Products, db, Users , Complaints 
-from priceAPI import make_gapi_request
+from models import HomeProduct, ProductPricing, Products, db, Users , Complaints 
+from priceAPI import make_gapi_request,pricing_bp
 from manage_products import manage_products_bp
 from earrings import product_bp
 from necklace import product_bp_necklace
@@ -24,11 +24,11 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/arihant'  # Replace password if applicable
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Replace with your mail server
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'krisha4801@gmail.com'  # Replace with your email
-    app.config['MAIL_PASSWORD'] = 'khmg oflh ddyq oxey'  # Replace with your email password
+    app.config['MAIL_USERNAME'] = 'krisha4801@gmail.com'  
+    app.config['MAIL_PASSWORD'] = 'khmg oflh ddyq oxey'  
     app.config['SECRET_KEY'] = 'your_secret_key_here'
 
     # Initialize extensions with the app
@@ -46,15 +46,26 @@ def create_app():
     app.register_blueprint(manage_feedbacks)
     app.register_blueprint(manage_Cart)
     app.register_blueprint(manage_homeproducts)
+    app.register_blueprint(pricing_bp)
 
 
     # Route for Home Page
     @app.route("/")
     def page1():
-      metal_prices = make_gapi_request()
-      home_products = db.session.query(HomeProduct, Products).join(Products).all() 
-    #   print("Home Products Data:", home_products)  
-      return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)    
+    # Fetch metal prices via API
+     metal_prices = make_gapi_request()
+
+    # Query to join HomeProduct, Products, and ProductPricing
+     home_products = (
+        db.session.query(HomeProduct, Products, ProductPricing)
+        .join(Products, HomeProduct.product_id == Products.product_id)
+        .join(ProductPricing, Products.product_id == ProductPricing.product_id)
+        .all()
+     )
+
+    # Render the template with the raw query results
+     return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)
+    
 
     # Login route to handle the login form submission
     @app.route('/login', methods=['POST'])
@@ -83,7 +94,6 @@ def create_app():
             flash("Login Failed! Invalid email or password.", "danger")  # Flash error message
         homret=page1()
         return homret
-        # return render_template("home.html")  # Stay on the same page and display the flash message
     
     @app.route('/forgot-password', methods=['GET'])
     def forgotPassword():
@@ -129,7 +139,7 @@ def create_app():
         confirm_url = url_for('confirm_email', token=token, _external=True)
         subject = "Please confirm your email"
         body = f"""
-        Welcome! Thanks for signing up. Please confirm your email by clicking the link below:
+        Arihant jewellers Welcomes you! Thanks for signing up. Please confirm your email by clicking the link below:
         {confirm_url}
         """
 
@@ -249,7 +259,19 @@ def create_app():
         return render_template('ring.html', rings=rings)
      else:
         return render_template('noMatches.html')
+    
 
+
+    # def make_celery(app):
+    #  """Create a Celery instance and link it to the Flask app."""
+    #  celery = Celery(
+    #     app.import_name,
+    #     broker="redis://localhost:6379/0",  # Redis as a broker
+    #     backend="redis://localhost:6379/0",
+    #     include=["tasks"]  # Import Celery tasks
+    #  )
+    #  celery.conf.update(app.config)
+    #  return celery
 
     return app
  

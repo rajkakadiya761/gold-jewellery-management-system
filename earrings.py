@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash,jsonify
-from models import db, Products,Material,ProductMaterial
+from models import ProductMaterial, db, Products,Material,ProductPricing
 
 # Create Blueprint for product management
 product_bp = Blueprint('product', __name__)
@@ -46,11 +46,14 @@ def delete_earring(product_id):
     earrings = Products.query.filter_by(category='earring').all()
     return render_template('earrings.html', earrings=earrings)  
 
-@product_bp.route('/earring/<int:product_id>')
+@product_bp.route('/bracelete/<int:product_id>')
 def earring_details(product_id):
     # Fetch the product from the database
     earring = Products.query.get_or_404(product_id)
-    return render_template('earring_details.html', earring=earring)
+    price = ProductPricing.query.filter_by(product_id=product_id).first()  # Safer approach
+
+    return render_template('earring_details.html', earring=earring, price=price)
+
 
 
 

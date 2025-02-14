@@ -351,7 +351,7 @@
         <div class="container my-4">
             <h2 class="text-center text-warning mb-4">Our Latest Collection</h2>
             <div class="row justify-content-center"> <!-- Add this class to center the cards -->
-                {% for home_product, product in home_products %}
+                {% for home_product, product, pricing in home_products %}
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <div class="card bg-warning-subtle card-container">
                         <a href="{{ url_for('product.earring_details', product_id=product.product_id) }}" class="text-decoration-none text-white">
@@ -359,7 +359,8 @@
                             <img src="{{ product.photo2 }}" class="hover-image" alt="Earring Hover">
                             <div class="card-body text-center">
                                 <h5 class="card-title text-muted">{{ product.name }}</h5>
-                                <p class="card-text text-muted">{{ product.product_weight }}g</p>
+                                <p class="card-text text-muted">Rs.{{ pricing.price }}</p>
+                                <!-- <p class="card-text text-muted">{{ product.product_weight }}g</p> -->
                             </div>
                         </a>
                     </div>
