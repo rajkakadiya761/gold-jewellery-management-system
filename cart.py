@@ -7,7 +7,12 @@ manage_Cart = Blueprint('Cart', __name__)
 def view_cart():
     if 'user_id' not in session:
         flash('Please log in to add items to your cart')
-        home_products = db.session.query(HomeProduct, Products).join(Products).all()
+        home_products = (
+        db.session.query(HomeProduct, Products, ProductPricing)
+       .join(Products, HomeProduct.product_id == Products.product_id)
+       .join(ProductPricing, Products.product_id == ProductPricing.product_id)
+       .all()
+       ) 
         return render_template("home.html", home_products=home_products)
 
     user_id = session['user_id']
@@ -71,7 +76,6 @@ def add_product_to_cart():
 
     return jsonify({"status": "success", "message": "Product added to cart."})
 
-
 @manage_Cart.route('/remove-from-cart/<int:product_id>', methods=['POST'])
 def remove_from_cart(product_id):
     """Removes a product from the cart of the logged-in user."""
@@ -81,19 +85,19 @@ def remove_from_cart(product_id):
     user_id = session['user_id']
     cart = Cart.query.filter_by(user_id=user_id).first()
     
-    if not cart:
+    if not cart or not cart.product_ids:
         return jsonify({"error": "Cart not found"}), 404
 
-    # Remove product_id from the cart's product_ids
     product_ids_list = cart.product_ids.split(',')
     
     if str(product_id) in product_ids_list:
         product_ids_list.remove(str(product_id))  # Remove the product_id
         cart.product_ids = ','.join(product_ids_list)  # Update the cart with the new list
         db.session.commit()
-        return jsonify({"message": "Item removed from cart"})
+        return jsonify({"message": "Item removed from cart"}), 200
     else:
         return jsonify({"error": "Product not found in cart"}), 404
+
 
 
 @manage_Cart.route('/manage-cart', methods=['POST'])
