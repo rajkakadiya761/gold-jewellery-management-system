@@ -113,3 +113,15 @@ class Cart(db.Model):
 
     # Relationship to User
     user = db.relationship('Users', backref=db.backref('cart', lazy=True))
+
+
+class ProcessedImage(db.Model):
+    __tablename__ = 'processed_images'
+
+    png_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id', ondelete='CASCADE'), nullable=False)
+    png_image = db.Column(db.String(255), nullable=False)
+
+    def __init__(self, product_id, png_image):
+        self.product_id = product_id
+        self.png_image = png_image

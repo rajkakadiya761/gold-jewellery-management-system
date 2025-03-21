@@ -1,0 +1,24 @@
+{
+    "source": {
+        "USB_CAM": 0,
+        "FILE": "assets/test_video/test.mp4",
+        "RTSP": "rtsp://192.168.1.1:8080/out.h264"
+    },
+    "welcome": [
+        {
+            "text": "ARIHANT JEWELLERS...",
+            "org": [
+                100,
+                225
+            ],
+            "fontScale": 2,
+            "color": [
+                255,
+                255,
+                255
+            ],
+            "thickness": 1
+        }
+    ],
+    "LIC_KEY": "41726968616E74204A6577656C6C657273"
+}

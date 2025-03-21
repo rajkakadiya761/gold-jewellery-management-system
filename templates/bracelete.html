@@ -278,7 +278,15 @@
                 <div class="card-container">
                     <a href="{{ url_for('productHand.bracelete_details', product_id=bracelete.product_id) }}"
                         class="text-decoration-none text-white">
+                        <!-- <img src="{{ bracelete.photo1 }}" class="item-image" alt="Jewelry"> -->
+                        {% if "http" in bracelete.photo1 %}
+                        <!-- If it's an external URL -->
                         <img src="{{ bracelete.photo1 }}" class="item-image" alt="Jewelry">
+                    {% else %}
+                        <!-- If it's a local image -->
+                        <img src="{{ url_for('static', filename=bracelete.photo1) }}" class="item-image" alt="Jewelry">
+                    {% endif %}
+                    
                         <div class="card-content">
                             <h5>{{ bracelete.name }}</h5>
                             <p>{{ bracelete.product_weight }}g</p>

@@ -222,7 +222,6 @@
         </div>
     </nav>
 
-    <!-- Include the Login Modal -->
     {% include 'LoginSignUp_Modal.html' %}
 
     {% if show_modal %}
@@ -283,7 +282,15 @@
                 <div class="card-container">
                     <a href="{{ url_for('product.earring_details', product_id=earring.product_id) }}"
                         class="text-decoration-none text-white">
+                        <!-- <img src="{{ earring.photo1 }}" class="item-image" alt="Jewelry"> -->
+                        {% if "http" in earring.photo1 %}
+                        <!-- If it's an external URL -->
                         <img src="{{ earring.photo1 }}" class="item-image" alt="Jewelry">
+                        {% else %}
+                        <!-- If it's a local image -->
+                        <img src="{{ url_for('static', filename=earring.photo1) }}" class="item-image" alt="Jewelry">
+                        {% endif %}
+
                         <div class="card-content">
                             <h5>{{ earring.name }}</h5>
                             <p>{{ earring.product_weight }}g</p>

@@ -134,7 +134,7 @@
             background-color: #333;
             color: white;
             border-radius: 5px;
-        
+
         }
 
         .notification.warning {
@@ -174,9 +174,12 @@
                         <ul class="dropdown-menu bg-dark">
                             <li><a class="dropdown-item text-light"
                                     href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
+                            <li><a class="dropdown-item text-light"
+                                    href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -273,22 +276,31 @@
                 <div class="card-container">
                     <a href="{{ url_for('productFinger.ring_details', product_id=ring.product_id) }}"
                         class="text-decoration-none text-white">
+                        <!-- <img src="{{ ring.photo1 }}" class="item-image" alt="Jewelry"> -->
+                        {% if "http" in ring.photo1 %}
+                        <!-- If it's an external URL -->
                         <img src="{{ ring.photo1 }}" class="item-image" alt="Jewelry">
+                        {% else %}
+                        <!-- If it's a local image -->
+                        <img src="{{ url_for('static', filename=ring.photo1) }}" class="item-image" alt="Jewelry">
+                        {% endif %}
+
                         <div class="card-content">
                             <h5>{{ ring.name }}</h5>
                             <p>{{ ring.product_weight }}g</p>
                         </div>
                     </a>
                     <div class="add-to-cart" id="addToCartBtn" data-product-id="{{ ring.product_id }}">Add to Cart</div>
-                    <form action="{{ url_for('productFinger.delete_ring', product_id=ring.product_id) }}"
-                        method="POST">
+                    <form action="{{ url_for('productFinger.delete_ring', product_id=ring.product_id) }}" method="POST">
                         <button type="submit" class="delete-btn">Delete</button>
                     </form>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <div class="notification" style="top: 10.5vh; right: 1.5vw; z-index: 1000; display: none; padding: 10px; border-radius: 5px;" id="notificationMessage"></div>
+        <div class="notification"
+            style="top: 10.5vh; right: 1.5vw; z-index: 1000; display: none; padding: 10px; border-radius: 5px;"
+            id="notificationMessage"></div>
     </div>
     <script>
         $(document).on('click', '.add-to-cart', function () {
@@ -320,7 +332,7 @@
                 }
             });
         });
-    </script> 
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 

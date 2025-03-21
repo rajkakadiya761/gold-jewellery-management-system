@@ -81,6 +81,7 @@
 
             /* Set a fixed height for the images */
         }
+
         .card-content {
             text-align: left;
             width: 100%;
@@ -136,7 +137,7 @@
             background-color: #333;
             color: white;
             border-radius: 5px;
-        
+
         }
 
         .notification.warning {
@@ -277,7 +278,15 @@
                 <div class="card-container">
                     <a href="{{ url_for('productNeck.necklace_details', product_id=necklace.product_id) }}"
                         class="text-decoration-none text-white">
+                        <!-- <img src="{{ necklace.photo1 }}" class="item-image" alt="Jewelry"> -->
+                        {% if "http" in necklace.photo1 %}
+                        <!-- If it's an external URL -->
                         <img src="{{ necklace.photo1 }}" class="item-image" alt="Jewelry">
+                        {% else %}
+                        <!-- If it's a local image -->
+                        <img src="{{ url_for('static', filename=necklace.photo1) }}" class="item-image" alt="Jewelry">
+                        {% endif %}
+
                         <div class="card-content">
                             <h5>{{ necklace.name }}</h5>
                             <p>{{ necklace.product_weight }}g</p>
@@ -285,7 +294,7 @@
                     </a>
                     <script>
                         $(document).on('click', '.add-to-cart', function () {
-                
+
                             function showNotification(message, type) {
                                 $('#notificationMessage').removeClass('success error info').addClass(type);
                                 $('#notificationMessage').text(message).fadeIn();
@@ -295,7 +304,7 @@
                             }
                             // Get the product ID from the button's data attribute
                             var productId = $(this).data('product-id');
-                
+
                             $.ajax({
                                 url: '/add_to_cart',
                                 method: 'POST',
@@ -314,7 +323,8 @@
                             });
                         });
                     </script>
-                    <div class="add-to-cart" id="addToCartBtn" data-product-id="{{ necklace.product_id }}">Add to Cart</div>                    
+                    <div class="add-to-cart" id="addToCartBtn" data-product-id="{{ necklace.product_id }}">Add to Cart
+                    </div>
                     <form action="{{ url_for('productNeck.delete_necklace', product_id=necklace.product_id) }}"
                         method="POST">
                         <button type="submit" class="delete-btn">Delete</button>
@@ -323,7 +333,9 @@
             </div>
             {% endfor %}
         </div>
-        <div class="notification" style="top: 10.5vh; right: 1.5vw; z-index: 1000; display: none; padding: 10px; border-radius: 5px;" id="notificationMessage"></div>
+        <div class="notification"
+            style="top: 10.5vh; right: 1.5vw; z-index: 1000; display: none; padding: 10px; border-radius: 5px;"
+            id="notificationMessage"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

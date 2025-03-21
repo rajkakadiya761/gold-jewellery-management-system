@@ -15,6 +15,7 @@ from ring import product_bp_ring
 from feedback import manage_feedbacks
 from cart import manage_Cart
 from manageHome import manage_homeproducts
+from ARNeck import ar_blueprint 
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -22,7 +23,8 @@ mail = Mail()  # Email setup
 def create_app():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/arihant'  # Replace password if applicable
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/arihant'  
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@127.0.0.1:3306/arihant'  
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking
     app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
     app.config['MAIL_PORT'] = 587
@@ -31,10 +33,10 @@ def create_app():
     app.config['MAIL_PASSWORD'] = 'khmg oflh ddyq oxey'  
     app.config['SECRET_KEY'] = 'your_secret_key_here'
 
+
     # Initialize extensions with the app
     db.init_app(app)
     mail.init_app(app)
-    
     # Register blueprints
     app.register_blueprint(manage_users_bp)
     app.register_blueprint(manage_complaints)
@@ -47,8 +49,7 @@ def create_app():
     app.register_blueprint(manage_Cart)
     app.register_blueprint(manage_homeproducts)
     app.register_blueprint(pricing_bp)
-
-
+    app.register_blueprint(ar_blueprint)
     # Route for Home Page
     @app.route("/")
     def page1():
@@ -260,18 +261,6 @@ def create_app():
      else:
         return render_template('noMatches.html')
     
-
-
-    # def make_celery(app):
-    #  """Create a Celery instance and link it to the Flask app."""
-    #  celery = Celery(
-    #     app.import_name,
-    #     broker="redis://localhost:6379/0",  # Redis as a broker
-    #     backend="redis://localhost:6379/0",
-    #     include=["tasks"]  # Import Celery tasks
-    #  )
-    #  celery.conf.update(app.config)
-    #  return celery
 
     return app
  
