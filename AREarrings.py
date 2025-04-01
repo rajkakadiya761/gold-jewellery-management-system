@@ -157,6 +157,7 @@ def save_picture(curr_frame):
 if __name__ == "__main__":
     cam = cv2.VideoCapture(loader.get_source(VID_SOURCE))
     cv2.imshow("preview", loader.generate_loading_screen(HEIGHT, WIDTH))
+    cv2.waitKey(100)  # Small delay to let the window initialize
     bring_window_to_front("preview")
 
     product_id = fetch_product_id()
@@ -212,6 +213,7 @@ if __name__ == "__main__":
                                 if 0 <= pos_x < WIDTH and 0 <= pos_y < HEIGHT:
                                     frame[pos_y, pos_x] = new_impose[i, j]
 
+            cv2.putText(frame, "Press ESC to exit", (10, 20), cv2.FONT_HERSHEY_SIMPLEX,  0.7, (0, 0, 0), 2, cv2.LINE_AA) 
             cv2.imshow("preview", frame)
 
             k = cv2.waitKey(15)

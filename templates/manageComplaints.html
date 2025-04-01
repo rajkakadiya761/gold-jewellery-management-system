@@ -89,7 +89,7 @@
 <body>
 
     <div class="container mt-5">
-        <h1 class="mb-4 text-center">Manage Complaints</h1>
+        <h1 class="mb-4 text-center" style="text-decoration: underline;">Manage Complaints</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div id="flashMessages">
@@ -103,11 +103,14 @@
         </div>
         {% endif %}
         {% endwith %}
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-warning">Back to Admin Panel</a>
+        <p></p>
         <table class="table table-bordered table-responsive">
             <thead class="table-dark">
                 <tr>
                     <th>Complaint ID</th>
                     <th>User ID</th>
+                    <th>Order ID</th>
                     <th>Message</th>
                     <th>Status</th>
                     <th>Type</th>
@@ -120,6 +123,7 @@
                 <tr>
                     <td>{{ complaint.complaint_id }}</td>
                     <td>{{ complaint.user_id }}</td>
+                    <td>{{ complaint.order_id }}</td>
                     <td>{{ complaint.message }}</td>
                     <td>{{ complaint.status }}</td>
                     <td>{{ complaint.type }}</td>

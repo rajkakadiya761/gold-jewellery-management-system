@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arihant Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
+
+    <style>
+        body {
+            background-color: rgb(40, 38, 38);
+            /* Black page background */
+            color: white;
+            /* White text for readability */
+        }
+
+        .table {
+            background-color: #222;
+            /* Dark grey table background */
+        }
+
+        .table th,
+        .table td {
+            color: white;
+            /* White text for table content */
+        }
+
+        .table-bordered {
+            border: 1px solid #444;
+            /* Subtle border for the table */
+        }
+
+        .table tbody tr:nth-of-type(odd) {
+            background-color: #333;
+            /* Ensure odd rows are dark gray */
+        }
+
+        .table tbody tr:nth-of-type(even) {
+            background-color: #222;
+            /* Ensure even rows are dark grey */
+        }
+
+        /* Modal styling */
+        .modal-content {
+            background-color: #333;
+            /* Greyish black modal background */
+            color: white;
+            /* White text for readability */
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #444;
+            /* Darker border for header */
+        }
+
+        .modal-footer {
+            border-top: 1px solid #444;
+            /* Darker border for footer */
+        }
+
+        .alert {
+            background-color: #555;
+            /* Grey background for flash messages */
+            color: white;
+            /* White text */
+            margin-top: 20px;
+            /* Add space from the top */
+            position: relative;
+            /* To position the cross button inside the alert box */
+        }
+
+        .alert .btn-close {
+            color: rgb(244, 227, 227);
+            /* Change cross color to white */
+            opacity: 0.5;
+            position: absolute;
+            /* Position it absolutely within the alert */
+            top: 15px;
+            /* Adjust the vertical positioning */
+            right: 10px;
+            /* Adjust the horizontal positioning */
+            padding: 0.2rem 0.5rem;
+        }
+
+        .btn-light-yellow {
+            background-color: #f4e6b1;
+            /* Light yellow shade */
+            border: none;
+            color: #333;
+            /* Dark text for contrast */
+        }
+
+        .btn-light-yellow:hover {
+            background-color: #f7e290;
+            /* Slightly darker on hover */
+            color: #333;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            /* Center both buttons */
+            align-items: center;
+            /* Vertically align buttons */
+            margin-bottom: 20px;
+            /* Add some margin below the buttons */
+        }
+
+        .button-container a,
+        .button-container button {
+            margin: 0 10px;
+            /* Add horizontal spacing between buttons */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4" style="text-align: center; text-decoration: underline;">Manage Processed Images</h2>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div id="flashMessages">
+            {% for category, message in messages %}
+            <div class="alert alert-warning alert-{{ category }} alert-dismissible fade show">
+                {{ message }}
+                <!-- Remove the "X" inside the button; let Bootstrap handle it -->
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="button-container">
+            <!-- Add Image Button -->
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addImageModal">Add Image</button>
+        
+            <!-- Back to Admin Panel Button -->
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-light-yellow">Back to Admin Panel</a>
+        </div>
+        
+        <!-- Images Table -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product ID</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for image in images %}
+                <tr>
+                    <td>{{ image.png_id }}</td>
+                    <td>{{ image.product_id }}</td>
+                    <td><img src="{{ image.png_image }}" alt="Image" width="100"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateImageModal"
+                            data-id="{{ image.png_id }}" data-product_id="{{ image.product_id }}"
+                            data-png_image="{{ image.png_image }}">
+                            Update
+                        </button>
+
+                        <a href="{{ url_for('manage_images.delete_image', png_id=image.png_id) }}"
+                            class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Add Image Modal -->
+    <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+
+
+                <form action="{{ url_for('manage_images.add_image') }}" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Product ID</label>
+                            <select class="form-control" name="product_id" required {% if not available_products %}disabled{% endif %}>
+                                {% if available_products %}
+                                    {% for product in available_products %}
+                                        <option value="{{ product.id }}">{{ product.id }} - {{ product.name }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled selected>All products already added</option>
+                                {% endif %}
+                            </select>
+                                                      
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">PNG Image URL</label>
+                            <input type="text" class="form-control" name="png_image" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+            <h5 class="modal-title">Add Image</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+    </div>
+
+    <!-- Update Image Modal -->
+    <div class="modal fade" id="updateImageModal" tabindex="-1" aria-labelledby="updateImageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" id="updateImageForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="png_id" id="updatePngId">
+                        <div class="mb-3">
+                            <label class="form-label">Product ID</label>
+                            <input type="number" class="form-control" name="product_id" id="updateProductId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">PNG Image URL</label>
+                            <input type="text" class="form-control" name="png_image" id="updatePngImage" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var updateImageModal = document.getElementById("updateImageModal");
+
+            updateImageModal.addEventListener("show.bs.modal", function (event) {
+                var button = event.relatedTarget;  // Ensure the event gets the correct button
+
+                if (!button) return;  // Prevent errors if modal is triggered incorrectly
+
+                var pngId = button.getAttribute("data-id");
+                var productId = button.getAttribute("data-product_id");
+                var pngImage = button.getAttribute("data-png_image");
+
+                if (!pngId || !productId || !pngImage) {
+                    console.error("Missing data attributes in button");
+                    return;
+                }
+
+                document.getElementById("updatePngId").value = pngId;
+                document.getElementById("updateProductId").value = productId;
+                document.getElementById("updatePngImage").value = pngImage;
+
+                var form = document.getElementById("updateImageForm");
+                form.action = `/manage-images/update_image/${pngId}`;
+            });
+        });
+
+        // Flash message auto-dismiss
+        setTimeout(function () {
+            const flashMessages = document.getElementById('flashMessages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none'; // Hide flash messages after 10 seconds
+            }
+        }, 5000); // 5 seconds 
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

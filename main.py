@@ -374,6 +374,7 @@ if __name__ == "__main__":
                             if y + i + h + my < HEIGHT and x + j + mx < WIDTH:
                                 frame[y + i + h + my, x + j + mx] = new_impose[i, j]
 
+            cv2.putText(frame, "Press ESC to exit", (10, 20), cv2.FONT_HERSHEY_SIMPLEX,  0.7, (0, 0, 0), 2, cv2.LINE_AA)
             cv2.imshow("preview", frame)
 
             k = cv2.waitKey(15)

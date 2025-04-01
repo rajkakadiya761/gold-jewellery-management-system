@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 09, 2025 at 10:56 AM
+-- Generation Time: Apr 01, 2025 at 03:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -37,11 +37,16 @@ CREATE TABLE `homeproducts` (
 --
 
 INSERT INTO `homeproducts` (`homeProduct_id`, `product_id`) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(13, 12),
-(7, 13);
+(2, 6),
+(7, 20),
+(3, 29),
+(9, 30),
+(8, 31),
+(4, 32),
+(6, 33),
+(5, 34),
+(1, 45),
+(10, 55);
 
 --
 -- Indexes for dumped tables
@@ -62,7 +67,7 @@ ALTER TABLE `homeproducts`
 -- AUTO_INCREMENT for table `homeproducts`
 --
 ALTER TABLE `homeproducts`
-  MODIFY `homeProduct_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `homeProduct_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables

@@ -166,24 +166,49 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{{ url_for('page1') }}#About">About us</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Shop by category
+                    <li class="nav-item dropdown"> 
+                        <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Shop by Category
                         </a>
-                        <ul class="dropdown-menu bg-dark">
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
-                            <li>
+                        <ul class="dropdown-menu bg-dark p-3" style="min-width: 500px;">
+                            <div class="container">
+                                <div class="row">
+                                    
+                                    <!-- Column 1: Products & Material -->
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header text-warning">Products</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('product.show_earrings') }}">Earrings</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productFinger.show_rings') }}">Rings</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productHand.show_braceletes') }}">Bracelets</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a>
+                    
+                                        <hr class="dropdown-divider">
+                    
+                                        <h6 class="dropdown-header text-warning">Material</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productGold.show_gold_products') }}">Gold Jewellery</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productSilver.show_silver_products') }}">Silver Jewellery</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productPlatinum.show_platinum_products') }}">Platinum Jewellery</a>
+                                    </div>
+                    
+                                    <!-- Column 2: For You & Occasion -->
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header text-warning">For You</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productMale.show_male_products') }}">Men's Collection</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productFemale.show_female_products') }}">Women's Collection</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productUni.show_uni_products') }}">Unisex Collection</a>
+                    
+                                        <hr class="dropdown-divider">
+                    
+                                        <h6 class="dropdown-header text-warning">Occasion</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productWedding.show_wedding_products') }}">Wedding Collection</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productMinimal.show_minimal_products') }}">Minimal Collection</a>
+                                    </div>
+                                </div>
+                    
+                                <!-- Full-Width Latest Collection at Bottom -->
                                 <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item text-light" href="{{ url_for('page1') }}#all">All</a></li>
+                                <a class="dropdown-item text-light fw-bold text-center" href="{{ url_for('page1') }}#latest">✨ Our Latest Collection</a>
+                            </div>
                         </ul>
                     </li>
                 </ul>

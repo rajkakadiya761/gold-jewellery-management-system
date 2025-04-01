@@ -44,10 +44,14 @@ def add_product():
         description = request.form['description']
         product_weight = request.form['product_weight']
         category = request.form['category']
+        gender = request.form['Gender']  
+        occasion = request.form.get('Occasion', 'Minimal')
         photo1 = request.form['photo1']
         photo2 = request.form['photo2']
+        photo3 = request.form.get('photo3', '')
+        photo4 = request.form.get('photo4', '')
         material_id = request.form['material_id']
-        sizes = request.form.getlist('sizes')  # Get all checked values
+        sizes = request.form.getlist('sizes') 
         quantity = request.form['quantity']
         if not sizes:
             sizes = ["medium"]
@@ -64,9 +68,13 @@ def add_product():
             product_weight=product_weight,
             sizes=size_str,
             category=category,
+            Gender=gender,
+            Occasion=occasion,
             photo1=photo1,
             photo2=photo2,
-            quantity=quantity
+            photo3=photo3,
+            photo4=photo4,
+            # quantity=quantity
         ).first()
 
         if existing_product:
@@ -85,8 +93,12 @@ def add_product():
             product_weight=product_weight,
             sizes=size_str,
             category=category,
+            Gender=gender,
+            Occasion=occasion,
             photo1=photo1,
-            photo2=photo2
+            photo2=photo2,
+            photo3=photo3,
+            photo4=photo4
         )
         db.session.add(new_product)
         db.session.commit()  # Commit to generate product_id
@@ -127,65 +139,89 @@ def update_product(product_id):
         product = Products.query.get(product_id)
         if not product:
             flash("Product not found.", "danger")
-            # return redirect(url_for('manage_products.manage_products'))
-            updret=manage_products()
-            return updret
-        
-        new_weight = request.form.get('product_weight', '').strip()  # Strip spaces
+            return manage_products()
 
-        # Ensure new_weight is a valid number
-        if new_weight and new_weight.replace('.', '', 1).isdigit():
-            new_weight = float(new_weight)
-            if new_weight > 0:  # Only update if weight is positive
-                product.product_weight = new_weight
-            else:
-                flash("Weight cannot be zero or negative! Keeping the previous weight.", "warning")
+        # Fetch material-product relationship first
+        product_material = ProductMaterial.query.filter_by(product_id=product_id).first()
 
-        # Update product details
+        # Fetch updated values
         product.name = request.form['name']
         product.description = request.form['description']
         product.product_weight = request.form['product_weight']
         product.category = request.form['category']
+        product.Gender = request.form.get('Gender', product.Gender)  
+        product.Occasion = request.form.get('Occasion', product.Occasion)  
         product.photo1 = request.form['photo1']
         product.photo2 = request.form['photo2']
+        product.photo3 = request.form.get('photo3', product.photo3)  # Avoid KeyError
+        product.photo4 = request.form.get('photo4', product.photo4)  # Avoid KeyError
 
-        # Update material-product relationship
-        material_id = request.form['material_id']
-        product_material = ProductMaterial.query.filter_by(product_id=product_id).first()
-       
-        selected_sizes = request.form.getlist('sizes')  # Ensure correct name is used
+        # Fetch sizes
+        selected_sizes = request.form.getlist('sizes')
         if not selected_sizes:
             selected_sizes = ["medium"]
+        product.sizes = ",".join(selected_sizes)
 
-        product.sizes = ",".join(selected_sizes)  # Convert list to string
-        
-        if product_material:
-            product_material.material_id = material_id
-        material_id = request.form.get('material_id')  # Use .get() to avoid KeyError
-        
+        # Fetch and validate product weight
+        new_weight = request.form.get('product_weight', '').strip()
+        if new_weight and new_weight.replace('.', '', 1).isdigit():
+            new_weight = float(new_weight)
+            if new_weight > 0:
+                product.product_weight = new_weight
+            else:
+                flash("Weight must be greater than zero!", "warning")
+        else:
+            flash("Invalid weight input.", "danger")
+            return manage_products()
+
+        # Fetch material_id
+        material_id = request.form.get('material_id')
+        if material_id:
+            if product_material:
+                product_material.material_id = material_id
+            else:
+                product_material = ProductMaterial(product_id=product_id, material_id=material_id)
+                db.session.add(product_material)
+
+        # Fetch and validate quantity
         new_quantity = request.form.get('quantity', '').strip()
         if new_quantity.isdigit():
             new_quantity = int(new_quantity)
-            if new_quantity >= 0:
-                pricing_entry = ProductPricing.query.filter_by(product_id=product_id).first()
-                if pricing_entry:
-                    pricing_entry.quantity = new_quantity
-                else:
-                    new_pricing = ProductPricing(product_id=product_id, quantity=new_quantity)
-                    db.session.add(new_pricing)
-            else:
+            if new_quantity < 0:
                 flash("Quantity cannot be negative!", "warning")
+                return manage_products()
+        else:
+            flash("Invalid quantity value!", "danger")
+            return manage_products()
 
-        
+        # Update price if weight and material are available
+        if new_weight and material_id:
+            new_price = calculate_product_price(new_weight, material_id)
+            if new_price is None:
+                flash("Price calculation failed.", "danger")
+                return manage_products()
+        else:
+            new_price = None
+
+        # Update pricing in ProductPricing table
+        pricing_entry = ProductPricing.query.filter_by(product_id=product_id).first()
+        if pricing_entry:
+            pricing_entry.price = new_price
+            pricing_entry.quantity = new_quantity
+        else:
+            if new_price is not None:  # Avoid inserting null price
+                new_pricing = ProductPricing(product_id=product_id, price=new_price, quantity=new_quantity)
+                db.session.add(new_pricing)
+
+        # Commit changes
         db.session.commit()
         flash("Product updated successfully!", "success")
+
     except Exception as e:
         db.session.rollback()
         flash(f"Error updating product: {str(e)}", "danger")
 
-    # return redirect(url_for('manage_products.manage_products'))
-    updret=manage_products()
-    return updret
+    return manage_products()
 
 @manage_products_bp.route('/delete-product/<int:product_id>', methods=['GET'])
 def delete_product(product_id):

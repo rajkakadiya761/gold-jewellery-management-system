@@ -151,7 +151,9 @@ def save_picture(curr_frame):
 if __name__ == "__main__":
     cam = cv2.VideoCapture(loader.get_source(VID_SOURCE))
     cv2.imshow("preview", loader.generate_loading_screen(HEIGHT, WIDTH))
+    cv2.waitKey(100)  # Small delay to let the window initialize
     bring_window_to_front("preview")
+
 
     product_id = fetch_product_id()
     if product_id:
@@ -212,7 +214,8 @@ if __name__ == "__main__":
                     for j in range(new_impose.shape[1]):
                         if new_impose[i, j][3] > 0:  # Ensure alpha is greater than 0
                             frame[y_offset + i, x_offset + j] = new_impose[i, j]
-
+        
+        cv2.putText(frame, "Press ESC to exit", (10, 20), cv2.FONT_HERSHEY_SIMPLEX,  0.7, (0, 0, 0), 2, cv2.LINE_AA)
         cv2.imshow("preview", frame)
 
         # Add waitKey to process GUI events

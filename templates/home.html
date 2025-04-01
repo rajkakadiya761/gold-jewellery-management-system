@@ -203,24 +203,49 @@
                     <li class="nav-item">
                         <a class="nav-link text-light fw-bold px-3" href="#About">About us</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light fw-bold px-3" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Shop by category
+                    <li class="nav-item dropdown"> 
+                        <a class="nav-link dropdown-toggle text-light fw-bold px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Shop by Category
                         </a>
-                        <ul class="dropdown-menu bg-dark">
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('product.show_earrings') }}">Earrings</a></li>
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('productFinger.show_rings') }}">Rings</a></li>
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('productHand.show_braceletes') }}">Bracelet</a></li>
-                            <li><a class="dropdown-item text-light"
-                                    href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a></li>
-                            <li>
+                        <ul class="dropdown-menu bg-dark p-3" style="min-width: 500px;">
+                            <div class="container">
+                                <div class="row">
+                                    
+                                    <!-- Column 1: Products & Material -->
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header text-warning">Products</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('product.show_earrings') }}">Earrings</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productFinger.show_rings') }}">Rings</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productHand.show_braceletes') }}">Bracelets</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productNeck.show_necklaces') }}">Necklaces</a>
+                    
+                                        <hr class="dropdown-divider">
+                    
+                                        <h6 class="dropdown-header text-warning">Material</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productGold.show_gold_products') }}">Gold Jewellery</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productSilver.show_silver_products') }}">Silver Jewellery</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productPlatinum.show_platinum_products') }}">Platinum Jewellery</a>
+                                    </div>
+                    
+                                    <!-- Column 2: For You & Occasion -->
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header text-warning">For You</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productMale.show_male_products') }}">Men's Collection</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productFemale.show_female_products') }}">Women's Collection</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productUni.show_uni_products') }}">Unisex Collection</a>
+                    
+                                        <hr class="dropdown-divider">
+                    
+                                        <h6 class="dropdown-header text-warning">Occasion</h6>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productWedding.show_wedding_products') }}">Wedding Collection</a>
+                                        <a class="dropdown-item text-light" href="{{ url_for('productMinimal.show_minimal_products') }}">Minimal Collection</a>
+                                    </div>
+                                </div>
+                    
+                                <!-- Full-Width Latest Collection at Bottom -->
                                 <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item text-light fw-bold px-3" href="#all">All</a></li>
+                                <a class="dropdown-item text-light fw-bold text-center" href="{{ url_for('page1') }}#latest">✨ Our Latest Collection</a>
+                            </div>
                         </ul>
                     </li>
                 </ul>
@@ -351,10 +376,9 @@
     </div>
 
     <!--all-->
-    <section id="all" class="border border-secondary mt-4 mx-3">
-        <h1 class="fs-3 text-decoration-underline text-warning my-4 text-center mb-5">ALL JEWELLERY</h1>
+    <section id="latest" class="border border-secondary mt-4 mx-3">
         <div class="container my-4">
-            <h2 class="text-center text-warning mb-4">Our Latest Collection</h2>
+            <h2 class="text-center text-decoration-underline text-warning mb-4">Our Latest Collection</h2>
             <div class="row justify-content-center"> <!-- Add this class to center the cards -->
                 {% for home_product, product, pricing in home_products %}
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
@@ -411,8 +435,8 @@
         </div>
         <div class="col-md-6 offset-md-3 text-center mt-4">
             <div class="d-flex justify-content-center align-items-center mb-3">
-                <i class="fas fa-map-marker-alt fa-2x text-warning mr-2"></i>
-                <p class="fs-5">236,Ghatloadia Road, Ghatloadia, Memnagar, Ahmedabad, India</p>
+                <i class="fas fa-map-marker-alt fa-2x text-warning "></i>
+                <p class="fs-5 mr-2 p-2">&nbsp;236,Ghatloadia Road, Ghatloadia, Memnagar, Ahmedabad, India</p>
             </div>
             <div class="d-flex justify-content-center align-items-center">
                 <i class="fas fa-phone-alt fa-2x text-warning mr-2"></i>
@@ -441,6 +465,10 @@
                     <form method="POST" action="/file-complaint">
                         <div class="modal-body">
                             <div class="mb-3">
+                                <label for="order_id" class="form-label">Order ID</label>
+                                <input type="text" name="order_id" id="order_id" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="message" class="form-label">Complaint Description</label>
                                 <textarea name="message" id="message" rows="5" class="form-control" required></textarea>
                             </div>
@@ -450,6 +478,7 @@
                                     <option value="delivery">Delivery</option>
                                     <option value="product">Product</option>
                                     <option value="packaging">Packaging</option>
+                                    <option value="others">other</option>
                                 </select>
                             </div>
                         </div>

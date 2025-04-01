@@ -89,13 +89,34 @@
             /* Adjust the horizontal positioning */
             padding: 0.2rem 0.5rem;
         }
+
+        .btn-light-yellow {
+            background-color: #f4e6b1; /* Light yellow shade */
+            border: none;
+            color: #333; /* Dark text for contrast */
+        }
+
+        .btn-light-yellow:hover {
+            background-color: #f7e290; /* Slightly darker on hover */
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center both buttons */
+            align-items: center; /* Vertically align buttons */
+            margin-bottom: 20px; /* Add some margin below the buttons */
+        }
+
+        .button-container a {
+            margin: 0 10px; /* Add horizontal spacing between buttons */
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container mt-5">
-        <h1 class="mb-4 text-center">Manage Products</h1>
+        <h1 class="mb-4 text-center" style="text-decoration: underline;">Manage Products</h1>
         <!-- Flash Messages (Success/Error) -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -119,6 +140,14 @@
             }, 3000);
         </script>
 
+        <div class="button-container">
+            <!-- Add Button on the Left -->
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+
+            <!-- Back to Admin Panel Button on the Right -->
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-light-yellow">Back to Admin Panel</a>
+        </div>
+
 
         <!-- Display Products Table -->
 
@@ -135,8 +164,12 @@
                         <th>Quantity</th>
                         <th>Category</th>
                         <th>Material</th>
+                        <th>Gender</th>
+                        <th>Occasion</th>
                         <th>Photo 1</th>
                         <th>Photo 2</th>
+                        <th>Photo 3</th>
+                        <th>Photo 4</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -145,7 +178,13 @@
                     <tr>
                         <td>{{ product.product_id }}</td>
                         <td>{{ product.name }}</td>
-                        <td>{{ product.description }}</td>
+                        <td>
+                            {% if product.description|length > 50 %}
+                            {{ product.description[:50] }}...
+                            {% else %}
+                            {{ product.description }}
+                            {% endif %}
+                        </td>
                         <td>{{ product.product_weight }}</td>
                         <td>{{ product.price }}</td>
                         <td>{{ product.sizes }}</td>
@@ -155,10 +194,18 @@
                             {{ product_material_map[product.product_id] | join(', ') if product.product_id in
                             product_material_map else 'No materials' }}
                         </td>
+                        <td>{{ product.Gender }}</td>
+                        <td>{{ product.Occasion }}</td>
                         <td><img src="{{ url_for('static', filename=product.photo1) }}" alt="Photo 1"
                                 style="height: 50px;">
                         </td>
                         <td><img src="{{ url_for('static', filename=product.photo2) }}" alt="Photo 2"
+                                style="height: 50px;">
+                        </td>
+                        <td><img src="{{ url_for('static', filename=product.photo3) }}" alt="Photo 3"
+                                style="height: 50px;">
+                        </td>
+                        <td><img src="{{ url_for('static', filename=product.photo4) }}" alt="Photo 4"
                                 style="height: 50px;">
                         </td>
                         <td class="d-flex justify-content-between">
@@ -174,8 +221,6 @@
         </div>
 
 
-        <!-- Add Product Button -->
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
     </div>
 
     <!-- Add Product Modal -->
@@ -189,7 +234,8 @@
                     </div>
                     <div class="modal-body">
                         Name:<input type="text" name="name" class="form-control my-2" placeholder="Name">
-                        Description:<textarea name="description" class="form-control my-2" placeholder="Description"></textarea>
+                        Description:<textarea name="description" class="form-control my-2"
+                            placeholder="Description"></textarea>
                         Weight:<input type="number" name="product_weight" class="form-control my-2" placeholder="Weight"
                             min="0">
                         <div class="mb-3">
@@ -213,10 +259,12 @@
                         </select>
                         <br><br>
                         Quantity:<input type="number" name="quantity" class="form-control my-2" placeholder="Quantity"
-                        min="0">
+                            min="0">
 
                         photo1:<input type="text" name="photo1" class="form-control my-2" placeholder="Photo 1 URL">
                         photo2:<input type="text" name="photo2" class="form-control my-2" placeholder="Photo 2 URL">
+                        Photo 3: <input type="text" name="photo3" class="form-control my-2" placeholder="Photo 3 URL">
+                        Photo 4: <input type="text" name="photo4" class="form-control my-2" placeholder="Photo 4 URL">
                         Material: <select name="material_id" required>
                             {% if materials %}
                             {% for material in materials %}
@@ -226,6 +274,22 @@
                             <option value="">No materials available</option>
                             {% endif %}
                         </select>
+                        <br>
+                        <!-- Gender Selection -->
+                        <label for="gender">Gender:</label>
+                        <select name="Gender" class="form-control my-2">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Uni">Uni</option>
+                        </select>
+
+                        <!-- Occasion Selection -->
+                        <label for="occasion">Occasion:</label>
+                        <select name="Occasion" class="form-control my-2">
+                            <option value="Minimal">Minimal</option>
+                            <option value="Wedding">Wedding</option>
+                        </select>
+
 
                     </div>
                     <div class="modal-footer">
@@ -257,7 +321,7 @@
 
                         Quantity:<input type="number" name="quantity" class="form-control my-2"
                             value="{{ product.quantity or 0 }}" min="0" placeholder="Quantity">
-    
+
                         <div class="mb-3">
                             <label class="form-label">Size:</label><br>
 
@@ -275,10 +339,33 @@
                         </div>
                         Category:<input type="text" name="category" class="form-control my-2"
                             value="{{ product.category or '' }}" placeholder="Category">
-                        photo1:<input type="text" name="photo1" class="form-control my-2" value="{{ product.photo1 or '' }}"
-                            placeholder="Photo 1 URL">
-                        photo2:<input type="text" name="photo2" class="form-control my-2" value="{{ product.photo2 or '' }}"
-                            placeholder="Photo 2 URL">
+                        <!-- Gender Selection -->
+                        <label for="gender">Gender:</label>
+                        <select name="Gender" class="form-control my-2">
+                            <option value="Male" {% if product.Gender=='Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if product.Gender=='Female' %}selected{% endif %}>Female</option>
+                            <option value="Uni" {% if product.Gender=='Uni' %}selected{% endif %}>Uni</option>
+                        </select>
+
+                        <!-- Occasion Selection -->
+                        <label for="occasion">Occasion:</label>
+                        <select name="Occasion" class="form-control my-2">
+                            <option value="Minimal" {% if product.Occasion=='Minimal' %}selected{% endif %}>Minimal
+                            </option>
+                            <option value="Wedding" {% if product.Occasion=='Wedding' %}selected{% endif %}>Wedding
+                            </option>
+                        </select>
+
+                        photo1:<input type="text" name="photo1" class="form-control my-2"
+                            value="{{ product.photo1 or '' }}" placeholder="Photo 1 URL">
+                        photo2:<input type="text" name="photo2" class="form-control my-2"
+                            value="{{ product.photo2 or '' }}" placeholder="Photo 2 URL">
+                        Photo 3: <input type="text" name="photo3" class="form-control my-2"
+                            value="{{ product.photo3 or '' }}" placeholder="Photo 3 URL">
+                        Photo 4: <input type="text" name="photo4" class="form-control my-2"
+                            value="{{ product.photo4 or '' }}" placeholder="Photo 4 URL">
+
+                        Material:
                         <select name="material_id" class="form-select my-2">
                             {% for material in materials %}
                             <option value="{{ material.material_id }}" {% if material.material_id in

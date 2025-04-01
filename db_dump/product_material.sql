@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 09, 2025 at 10:56 AM
+-- Generation Time: Apr 01, 2025 at 03:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -38,12 +38,66 @@ CREATE TABLE `product_material` (
 --
 
 INSERT INTO `product_material` (`product_material_id`, `product_id`, `material_id`) VALUES
-(1, 1, 3),
-(2, 2, 3),
+(1, 1, 1),
+(2, 2, 1),
 (3, 3, 2),
+(4, 37, 1),
+(5, 36, 1),
 (6, 12, 2),
 (7, 13, 1),
-(8, 14, 1);
+(8, 14, 2),
+(9, 35, 1),
+(10, 34, 2),
+(11, 33, 1),
+(12, 22, 1),
+(13, 30, 2),
+(14, 31, 3),
+(15, 32, 2),
+(16, 21, 1),
+(17, 20, 1),
+(18, 19, 2),
+(19, 18, 1),
+(20, 17, 2),
+(21, 16, 1),
+(22, 25, 1),
+(23, 15, 2),
+(24, 23, 1),
+(25, 24, 1),
+(26, 26, 1),
+(27, 27, 1),
+(28, 28, 3),
+(29, 29, 3),
+(30, 39, 3),
+(31, 41, 3),
+(32, 5, 1),
+(33, 40, 2),
+(34, 4, 2),
+(35, 38, 1),
+(36, 42, 1),
+(37, 43, 1),
+(38, 44, 1),
+(39, 45, 1),
+(40, 46, 2),
+(41, 47, 2),
+(42, 48, 1),
+(43, 49, 1),
+(44, 51, 1),
+(45, 52, 3),
+(46, 60, 2),
+(47, 53, 1),
+(48, 54, 2),
+(49, 55, 2),
+(50, 56, 1),
+(51, 57, 2),
+(52, 6, 2),
+(53, 7, 3),
+(54, 8, 2),
+(55, 58, 2),
+(56, 59, 2),
+(57, 9, 1),
+(58, 10, 2),
+(59, 11, 3),
+(60, 50, 3);
 
 --
 -- Indexes for dumped tables
@@ -65,7 +119,7 @@ ALTER TABLE `product_material`
 -- AUTO_INCREMENT for table `product_material`
 --
 ALTER TABLE `product_material`
-  MODIFY `product_material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `product_material_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- Constraints for dumped tables

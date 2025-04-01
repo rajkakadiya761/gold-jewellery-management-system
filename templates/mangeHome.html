@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arihant Jewellers</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -82,6 +83,27 @@
             /* Adjust the horizontal positioning */
             padding: 0.2rem 0.5rem;
         }
+
+        .btn-light-yellow {
+            background-color: #f4e6b1; /* Light yellow shade */
+            border: none;
+            color: #333; /* Dark text for contrast */
+        }
+
+        .btn-light-yellow:hover {
+            background-color: #f7e290; /* Slightly darker on hover */
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center both buttons */
+            align-items: center; /* Vertically align buttons */
+            margin-bottom: 20px; /* Add some margin below the buttons */
+        }
+
+        .button-container a {
+            margin: 0 10px; /* Add horizontal spacing between buttons */
+        }
     </style>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
 </head>
@@ -89,7 +111,7 @@
 <body>
 
     <div class="container mt-5">
-        <h1 class="mb-4 text-center">Manage Home Products</h1>
+        <h1 class="mb-4 text-center" style="text-decoration: underline;">Manage Home Products</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div id="flashMessages">
@@ -103,6 +125,15 @@
         </div>
         {% endif %}
         {% endwith %}
+
+        <div class="button-container">
+    
+            <!-- Add Home Product Button -->
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addHomeProductModal">Add Product</button><p></p>
+
+            <!-- Back to Admin Panel Button on the Right -->
+            <a href="{{ url_for('admin_panel') }}" class="btn btn-light-yellow">Back to Admin Panel</a>
+        </div>
         <table class="table table-bordered table-responsive">
             <thead class="table-dark">
                 <tr>
@@ -133,9 +164,7 @@
             </tbody>
         </table>
 
-        <!-- Add Home Product Button -->
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addHomeProductModal">Add
-            Product</button>
+        
     </div>
     <!-- Modal for Adding Home Product -->
     <div class="modal fade" id="addHomeProductModal" tabindex="-1" aria-labelledby="addHomeProductModalLabel"

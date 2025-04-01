@@ -1,44 +1,16 @@
-# def make_gapi_request():
-#     # api_key = "goldapi-4fdjs3fsm6es0363-io"
-#     api_key = "goldapi-jti2sm6dzkgyp-io"
-#     metals = ["XAU", "XAG", "XPT"]  # Gold, Silver, Platinum
-#     curr = "INR"
-#     prices = {}
-
-#     for metal in metals:
-#         url = f"https://www.goldapi.io/api/{metal}/{curr}"
-        
-#         headers = {
-#             "x-access-token": api_key,
-#             "Content-Type": "application/json"
-#         }
-        
-#         try:
-#             response = requests.get(url, headers=headers)
-#             response.raise_for_status()
-#             result = response.json()
-            
-#             # Get the price for 1 gram (if available) or price field in INR
-#             price_per_gram = result.get('price_gram_24k') if metal == "XAU" else result.get('price')
-#             prices[metal] = round(price_per_gram, 2) if price_per_gram else "Data Unavailable"
-
-#         except requests.exceptions.RequestException as e:
-#             print(f"Error fetching {metal} price:", str(e))
-#             prices[metal] = "Error"
-
-#     return prices
-
 from flask import jsonify,request
 from flask import Blueprint, current_app
 import requests
 from models import db, Products, ProductPricing, ProductMaterial, Material
+from apscheduler.schedulers.background import BackgroundScheduler
+# from flask_apscheduler import APScheduler
 
 pricing_bp = Blueprint("pricing", __name__)  # Create a Blueprint
 
 def make_gapi_request():
     """Fetches live metal prices per gram in INR with proper currency and unit conversions."""
-    # api_key = "goldapi-7dilism6z5h88g-io"
-    api_key = "goldapi-c1btsm761xlh8-io"
+    api_key = "goldapi-11wasm8ldj9z1-io"
+    # api_key = "goldapi-4fdjs3fsm6es0363-io"
     
     metals = {"XAU": "gold", "XAG": "silver", "XPT": "platinum"}
     
@@ -177,3 +149,8 @@ def add_product():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
+scheduler = BackgroundScheduler(daemon=True)  # Run in the background
+def start_scheduler():
+    # Add the job to update product pricing every 3 hours
+    scheduler.add_job(func=lambda: current_app.app_context().push() or update_product_pricing(), trigger='interval',  hours=1, id='update_pricing')
+    print("Scheduler started: Updating product pricing every 12 hours")

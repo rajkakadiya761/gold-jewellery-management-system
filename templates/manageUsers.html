@@ -81,13 +81,34 @@
             /* Adjust the horizontal positioning */
             padding: 0.2rem 0.5rem;
         }
+
+        .btn-light-yellow {
+            background-color: #f4e6b1; /* Light yellow shade */
+            border: none;
+            color: #333; /* Dark text for contrast */
+        }
+
+        .btn-light-yellow:hover {
+            background-color: #f7e290; /* Slightly darker on hover */
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center both buttons */
+            align-items: center; /* Vertically align buttons */
+            margin-bottom: 20px; /* Add some margin below the buttons */
+        }
+
+        .button-container a {
+            margin: 0 10px; /* Add horizontal spacing between buttons */
+        }
     </style>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
 </head>
 <body>
 
 <div class="container mt-5">
-    <h1 class="text-center">Manage Users</h1>
+    <h1 class="text-center" style="text-decoration: underline;">Manage Users</h1>
 
     <!-- Flash Messages (Success/Error) -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -104,12 +125,20 @@
     {% endif %}
     {% endwith %}
 
+    <div class="button-container">
+        <!-- Add Customer Button (opens the modal) -->
+        <button class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#addCustomerModal">Add Customer</button>
+
+        <!-- Back to Admin Panel Button on the Right -->
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-light-yellow mt-3">Back to Admin Panel</a>
+    </div>
+
     <!-- Table of Users -->
-    <h2 class="mt-4">Users List</h2>
+     <p></p>
     <table class="table table-bordered table-responsive">
         <thead>
             <tr>
-
+                <th>User_id</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -120,6 +149,7 @@
         <tbody>
             {% for user in users %}
             <tr>
+                <td>{{ user.user_id }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.role }}</td>
@@ -134,8 +164,7 @@
         </tbody>
     </table>
 
-    <!-- Add Customer Button (opens the modal) -->
-    <button class="btn btn-warning mt-4" data-bs-toggle="modal" data-bs-target="#addCustomerModal">Add Customer</button>
+   
 
     <!-- Add Customer Modal -->
     <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">

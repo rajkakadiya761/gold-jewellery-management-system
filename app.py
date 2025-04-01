@@ -5,8 +5,8 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from manage_users import manage_users_bp  
 from complaint import manage_complaints
-from models import HomeProduct, ProductPricing, Products, db, Users , Complaints 
-from priceAPI import make_gapi_request,pricing_bp
+from models import HomeProduct, ProductPricing, Products, db, Users , Complaints , ProductMaterial
+from priceAPI import make_gapi_request,pricing_bp,scheduler,start_scheduler
 from manage_products import manage_products_bp
 from earrings import product_bp
 from necklace import product_bp_necklace
@@ -16,6 +16,15 @@ from feedback import manage_feedbacks
 from cart import manage_Cart
 from manageHome import manage_homeproducts
 from ARNeck import ar_blueprint 
+from FemaleCollec import product_bp_female
+from MaleCollec import product_bp_male
+from UniCollec import product_bp_uni
+from GoldProd import product_bp_gold
+from SilverProd import product_bp_silver
+from PlatinumProd import product_bp_platinum
+from WeddingCollec import product_bp_wedding
+from MinimalCollec import product_bp_minimal
+from manage_AR import manage_images_bp
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -32,6 +41,10 @@ def create_app():
     app.config['MAIL_USERNAME'] = 'krisha4801@gmail.com'  
     app.config['MAIL_PASSWORD'] = 'khmg oflh ddyq oxey'  
     app.config['SECRET_KEY'] = 'your_secret_key_here'
+    
+    with app.app_context():
+        start_scheduler()  # Add the job to the scheduler
+        scheduler.start() 
 
 
     # Initialize extensions with the app
@@ -50,13 +63,21 @@ def create_app():
     app.register_blueprint(manage_homeproducts)
     app.register_blueprint(pricing_bp)
     app.register_blueprint(ar_blueprint)
+    app.register_blueprint(product_bp_female)
+    app.register_blueprint(product_bp_male)
+    app.register_blueprint(product_bp_uni)
+    app.register_blueprint(product_bp_gold)
+    app.register_blueprint(product_bp_silver)
+    app.register_blueprint(product_bp_platinum)
+    app.register_blueprint(product_bp_wedding)
+    app.register_blueprint(product_bp_minimal)
+    app.register_blueprint(manage_images_bp)
     # Route for Home Page
     @app.route("/")
     def page1():
     # Fetch metal prices via API
      metal_prices = make_gapi_request()
-
-    # Query to join HomeProduct, Products, and ProductPricing
+     # Query to join HomeProduct, Products, and ProductPricing
      home_products = (
         db.session.query(HomeProduct, Products, ProductPricing)
         .join(Products, HomeProduct.product_id == Products.product_id)
@@ -69,33 +90,68 @@ def create_app():
     
 
     # Login route to handle the login form submission
+    # @app.route('/login', methods=['POST'])
+    # def login():
+    #     email = request.form['logInEmail']
+    #     password = request.form['logInPassword']
+
+    #     # Query the database to find the user with the entered email
+    #     user = Users.query.filter_by(email=email).first()
+
+    #     # Check if the user exists and if the password matches
+    #     if user and user.password == password:
+    #         if user.is_confirmed:
+    #             if user and user.password == password and user.role=="Customer":
+    #                 session['user_id'] = user.user_id
+    #                 flash(f"{user.name} from {user.email} Login is Successful!", "success")  # Flash success message
+    #             elif user and user.password == password and user.role=="Admin":
+    #                   return render_template('admin.html')
+    #         else:
+    #             link = Markup(
+    #                 'Please confirm Email Verification Link! '
+    #                 '<a href="{}">Click here</a> if you want the link to be re-sent.'.format(url_for('resend_confirmation', email=email))
+    #             )
+    #             flash(link, "danger")
+    #     else:
+    #         flash("Login Failed! Invalid email or password.", "danger")  # Flash error message
+    #     homret=page1()
+    #     return homret
+    
     @app.route('/login', methods=['POST'])
     def login():
         email = request.form['logInEmail']
         password = request.form['logInPassword']
-
-        # Query the database to find the user with the entered email
+    
         user = Users.query.filter_by(email=email).first()
-
-        # Check if the user exists and if the password matches
+    
         if user and user.password == password:
             if user.is_confirmed:
-                if user and user.password == password and user.role=="Customer":
-                    session['user_id'] = user.user_id
-                    flash(f"{user.name} from {user.email} Login is Successful!", "success")  # Flash success message
-                elif user and user.password == password and user.role=="Admin":
-                      return render_template('admin.html')
+                session['user_id'] = user.user_id  # Store user ID in session
+                if user.role == "Admin":
+                    return redirect(url_for('admin_panel'))  # Redirect admins to admin panel
+                elif user.role == "Customer":
+                    flash(f"{user.name} from {user.email} Login is Successful!", "success")
+                    homret=page1()
+                    return homret
             else:
-                link = Markup(
-                    'Please confirm Email Verification Link! '
-                    '<a href="{}">Click here</a> if you want the link to be re-sent.'.format(url_for('resend_confirmation', email=email))
-                )
-                flash(link, "danger")
+                flash("Please confirm your email before logging in.", "danger")
         else:
-            flash("Login Failed! Invalid email or password.", "danger")  # Flash error message
+            flash("Login Failed! Invalid email or password.", "danger")
+        
         homret=page1()
         return homret
     
+    @app.route('/admin')
+    def admin_panel():
+        # Check if the user is logged in and is an admin
+        if 'user_id' in session:
+            user = Users.query.filter_by(user_id=session['user_id']).first()
+            if user and user.role == "Admin":
+                return render_template('admin.html')  # Render admin panel
+        flash("Unauthorized access! Admins only.", "danger")
+        homret=page1()
+        return homret
+
     @app.route('/forgot-password', methods=['GET'])
     def forgotPassword():
         email = request.args.get('email')
@@ -213,7 +269,6 @@ def create_app():
             flash("User not found.", "danger")
         homret=page1()
         return homret
-        # return render_template("home.html")
     
     @app.route('/logout', methods=['POST'])
     def logout():
@@ -221,7 +276,6 @@ def create_app():
        flash('You have been logged out.Visit us again. Thankyou!!', 'success')
        homret=page1()
        return homret
-    #    return render_template('home.html')
 
         
     @app.route('/reset-password', methods=['POST'])
@@ -232,7 +286,7 @@ def create_app():
 
         user = Users.query.filter_by(email=email).first()
         if user:
-            # Update the user's password (hashed for security)
+            
             user.password = new_password  # Store plain text password directly
             db.session.commit()
             flash("Your password has been updated successfully!", "success")
@@ -258,6 +312,30 @@ def create_app():
      elif any(keyword in query for keyword in ['rings', 'ring', 'viti', 'finger','finger','rig']):
         rings = Products.query.filter_by(category='ring').all()
         return render_template('ring.html', rings=rings)
+     elif any(word in query.split() for word in ['men', 'man', 'male', 'he', 'him', 'boy','his','male jewellery','mens collection']):
+       male = Products.query.filter(Products.Gender == 'Male').all()
+       return render_template('MaleCollec.html', products=male)
+     elif any(word in query.split() for word in ['women', 'woman', 'female', 'her', 'she', 'girl','womans collection']):
+       female = Products.query.filter(Products.Gender == 'Female').all()
+       return render_template('FemaleCollec.html', products=female)
+     elif any(keyword in query for keyword in ['uni', 'both', 'male/female', 'he/her','unisex','Both gender']):
+        uni = Products.query.filter(Products.Gender == 'Uni').all()
+        return render_template('UniCollec.html', products=uni)
+     elif any(keyword in query for keyword in ['weding', 'wedding', 'marriag', 'mandap','heavy','Expensive']):
+        weed = Products.query.filter(Products.Occasion == 'Wedding').all()
+        return render_template('WeddingCollec.html', products=weed)
+     elif any(keyword in query for keyword in ['minimal', 'haldi', 'mehndi', 'engagement','roka','function','traditional']):
+        mini = Products.query.filter(Products.Occasion == 'Minimal').all()
+        return render_template('MinimalCollec.html', products=mini)
+     elif any(keyword in query for keyword in ['gold', 'suvarn', 'sona']):
+        gold = Products.query.filter(ProductMaterial.material_id == 1).all()
+        return render_template('GoldProd.html', products=gold)
+     elif any(keyword in query for keyword in ['silver', 'chandi','925 silver','sil']):
+        silver = Products.query.filter(ProductMaterial.material_id == 2).all()
+        return render_template('SilverProd.html', products=silver)
+     elif any(keyword in query for keyword in ['platinum','plat']):
+        platinum = Products.query.filter(ProductMaterial.material_id == 3).all()
+        return render_template('PlatinumProd.html', products=platinum)
      else:
         return render_template('noMatches.html')
     
