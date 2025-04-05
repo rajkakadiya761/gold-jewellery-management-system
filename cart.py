@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, session, jsonify,redirect, url_for
-from models import ProductPricing, db,Users,Products,Cart,HomeProduct
+from models import ProductPricing, db,Users,Products,Cart,HomeProduct,Payments
 
 manage_Cart = Blueprint('Cart', __name__)
 
@@ -116,6 +116,5 @@ def manage_carts():
         'viewCart.html',
         carts=cart_data
     )
-
 
 

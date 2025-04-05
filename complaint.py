@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for,session
-from models import db, Complaints,Products,HomeProduct, ProductPricing,Payment
+from models import db, Complaints,Products,HomeProduct, ProductPricing,Payments
 
 manage_complaints = Blueprint('complaint', __name__)
 
@@ -16,16 +16,16 @@ def file_complaint():
         user_id = session['user_id']
         message = request.form['message']
         complaint_type = request.form['type']
-        order_id = request.form['order_id']  # Fetch order_id from form
+        payment_id = request.form['payment_id']  # Fetch payment_id from form
 
-        # Fetch user_id from payments table based on order_id
-        payment_record = db.session.query(Payment).filter_by(order_id=order_id).first()
+        # Fetch user_id from payments table based on payment_id
+        payment_record = db.session.query(Payments).filter_by(payment_id=payment_id).first()
 
         if payment_record:
             # Check if the user_id from payments matches the logged-in user
             if payment_record.user_id == user_id:
                 # Create and save new complaint
-                new_complaint = Complaints(user_id=user_id, message=message, type=complaint_type, order_id=order_id)
+                new_complaint = Complaints(user_id=user_id, message=message, type=complaint_type, payment_id=payment_id)
                 db.session.add(new_complaint)
                 db.session.commit()
                 flash("Complaint filed successfully!", "success")

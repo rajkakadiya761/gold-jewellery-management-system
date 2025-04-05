@@ -35,10 +35,10 @@ class Complaints(db.Model):
     status = db.Column(db.Enum('pending', 'inprocess', 'resolved'), default='pending')
     type = db.Column(db.Enum('delivery', 'product', 'packaging','others'), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    order_id = db.Column(db.Integer, db.ForeignKey('payments.order_id'), nullable=False)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payments.payment_id'), nullable=False)
 
     # Use string-based reference for relationship
-    payment = db.relationship('Payment', backref='complaints')
+    payment = db.relationship('Payments', backref='complaints')
 
 class Products(db.Model):
     __tablename__ = 'products'
@@ -133,19 +133,55 @@ class ProcessedImage(db.Model):
         self.product_id = product_id
         self.png_image = png_image
         
-class Payment(db.Model):
+# class Payment(db.Model):
+#     __tablename__ = 'payments'
+
+#     order_id = db.Column(db.Integer, primary_key=True, autoincrement=True) 
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)     
+#     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)  
+#     amount = db.Column(db.Numeric(18, 2), nullable=False)           # Amount with 2 decimals
+#     payment_gateway = db.Column(db.String(20), nullable=False)      
+#     created_at = db.Column(db.DateTime, default=datetime.utcnow)   
+
+#     # Relationships
+#     user = db.relationship('Users', backref=db.backref('payments', lazy=True))         
+#     product = db.relationship('Products', backref=db.backref('payments', lazy=True)) 
+
+#     def _repr_(self):
+#         return f"<Payment Order {self.order_id}, User {self.user_id}, Product {self.product_id}, Amount {self.amount}>"
+class Payments(db.Model):
     __tablename__ = 'payments'
 
-    order_id = db.Column(db.Integer, primary_key=True, autoincrement=True) 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)     
-    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)  
-    amount = db.Column(db.Numeric(18, 2), nullable=False)           # Amount with 2 decimals
-    payment_gateway = db.Column(db.String(20), nullable=False)      
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)   
+    payment_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    # product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+    price = db.Column(db.Numeric(10, 2), nullable=False)  
+    product_ids = db.Column(JSON, nullable=False) 
+    quantities = db.Column(JSON, nullable=False)   # ✅ Naya column to store quantities
+    # payment_status = db.Column(db.String(50), nullable=False)
+    transaction_id = db.Column(db.String(255), nullable=True)
+    payment_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('Users', backref='payments')
+
+class Address(db.Model):  
+    __tablename__ = 'address'  # Table name
+
+    # Primary key with auto-increment
+    address_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    
+    # Foreign key for user
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+
+    # Address fields
+    address = db.Column(db.String(300), nullable=False)
+    state = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    postal_code = db.Column(db.String(6), nullable=False)
+    phone_number = db.Column(db.String(10), nullable=False)
 
     # Relationships
-    user = db.relationship('Users', backref=db.backref('payments', lazy=True))         
-    product = db.relationship('Products', backref=db.backref('payments', lazy=True)) 
+    user = db.relationship('Users', backref=db.backref('addresses', lazy=True))
 
     def _repr_(self):
-        return f"<Payment Order {self.order_id}, User {self.user_id}, Product {self.product_id}, Amount {self.amount}>"
+        return f"<Address ID {self.address_id}, User {self.user_id}>"
