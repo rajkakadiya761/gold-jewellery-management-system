@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Payments | Arihant Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/ari.png') }}">
+    <style>
+        body {
+            background-color: rgb(40, 38, 38);
+            color: white;
+        }
+
+        .table {
+            background-color: #222;
+        }
+
+        .table th,
+        .table td {
+            color: white;
+        }
+
+        .table-bordered {
+            border: 1px solid #444;
+        }
+
+        .table tbody tr:nth-of-type(odd) {
+            background-color: #333;
+        }
+
+        .table tbody tr:nth-of-type(even) {
+            background-color: #222;
+        }
+
+        .alert {
+            background-color: #555;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .alert .btn-close {
+            color: rgb(244, 227, 227);
+            opacity: 0.5;
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            padding: 0.2rem 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center" style="text-decoration: underline;">Manage Payments</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div id="flashMessages">
+            {% for category, message in messages %}
+            <div class="alert alert-warning alert-{{ category }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-warning mb-3">Back to Admin Panel</a>
+
+        <table class="table table-bordered table-responsive">
+            <thead class="table-dark">
+                <tr>
+                    <th>Payment ID</th>
+                    <th>User ID</th>
+                    <th>Price</th>
+                    <th>Transaction ID</th>
+                    <th>Payment Date</th>
+                    <th>Product IDs</th>
+                    <th>Quantities</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Postal Code</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment, address in all_payments %}
+                <tr>
+                    <td>{{ payment.payment_id }}</td>
+                    <td>{{ payment.user_id }}</td>
+                    <td>{{ payment.price }}</td>
+                    <td>{{ payment.transaction_id }}</td>
+                    <td>{{ payment.payment_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ payment.product_ids }}</td>
+                    <td>{{ payment.quantities }}</td>
+                    <td>{{ address.address }}</td>
+                    <td>{{ address.city }}</td>
+                    <td>{{ address.state }}</td>
+                    <td>{{ address.postal_code }}</td>
+                    <td>{{ address.phone_number }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Auto-dismiss flash messages
+        setTimeout(function () {
+            const flashMessages = document.getElementById('flashMessages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none';
+            }
+        }, 5000);
+    </script>
+</body>
+
+</html>

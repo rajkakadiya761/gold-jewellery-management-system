@@ -1,19 +1,25 @@
 from flask import Blueprint, render_template, flash, request, session, jsonify,redirect, url_for
 from models import ProductPricing, db,Users,Products,Cart,HomeProduct,Payments
-
+from priceAPI import make_gapi_request
 manage_Cart = Blueprint('Cart', __name__)
 
 @manage_Cart.route('/cart', methods=['GET'])
 def view_cart():
     if 'user_id' not in session:
         flash('Please log in to add items to your cart')
+        metal_prices = make_gapi_request()
+        # Query to join HomeProduct, Products, and ProductPricing
         home_products = (
-        db.session.query(HomeProduct, Products, ProductPricing)
-       .join(Products, HomeProduct.product_id == Products.product_id)
-       .join(ProductPricing, Products.product_id == ProductPricing.product_id)
-       .all()
-       ) 
-        return render_template("home.html", home_products=home_products)
+         db.session.query(HomeProduct, Products, ProductPricing)
+         .join(Products, HomeProduct.product_id == Products.product_id)
+         .join(ProductPricing, Products.product_id == ProductPricing.product_id)
+         .all()
+        )
+ 
+        # Render the template with the raw query results
+        return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)
+    
+        # return render_template("home.html", home_products=home_products)
 
     user_id = session['user_id']
     cart = Cart.query.filter_by(user_id=user_id).first()
@@ -97,7 +103,6 @@ def remove_from_cart(product_id):
         return jsonify({"message": "Item removed from cart"}), 200
     else:
         return jsonify({"error": "Product not found in cart"}), 404
-
 
 
 @manage_Cart.route('/manage-cart', methods=['POST'])

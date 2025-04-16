@@ -479,10 +479,31 @@
                                 "amount": data.amount,
                                 "currency": data.currency,
                                 "order_id": data.order_id,
-                                "handler": function (response) {
-                                    alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                                "handler": async function (response) {
+                                    try {
+                                        const saveResponse = await fetch('/payment_success', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                product_ids: selectedProducts.map(p => p.id),
+                                                quantities: selectedProducts.map(p => p.quantity),
+                                                price: (data.amount / 100).toFixed(2),
+                                                transaction_id: response.razorpay_payment_id
+                                            })
+                                        });
+
+                                        const result = await saveResponse.json();
+                                        if (saveResponse.ok) {
+                                            alert('✅ Payment successful and saved!');
+                                        } else {
+                                            alert('⚠ Payment done but saving failed: ' + result.error);
+                                        }
+                                    } catch (error) {
+                                        console.error("Saving error:", error);
+                                        alert('⚠ Payment successful but failed to save in DB.');
+                                    }
                                 },
-                                "theme": { "color": "#F37254" }
+                                "theme": { "color":"#F37254"}
                             };
 
                             var rzp = new Razorpay(options);

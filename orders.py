@@ -149,15 +149,15 @@ def initiate_payment():
 
         if razorpay_order.get('status') == 'created':
             try:
-                new_payment = Payments(
-                    user_id=user_id,
-                    product_ids=valid_product_ids,
-                    quantities=valid_quantities,  # ✅ Store quantities correctly
-                    price=round(total_price, 2),
-                    transaction_id=razorpay_order['id']
-                )
-                db.session.add(new_payment)
-                db.session.commit()
+                # new_payment = Payments(
+                #     user_id=user_id,
+                #     product_ids=valid_product_ids,
+                #     quantities=valid_quantities,  # ✅ Store quantities correctly
+                #     price=round(total_price, 2),
+                #     transaction_id=razorpay_order['id']
+                # )
+                # db.session.add(new_payment)
+                # db.session.commit()
                 print("✅ Payment saved to DB")
             except Exception as db_err:
                 print("❌ Error saving payment:", db_err)
@@ -177,22 +177,25 @@ def initiate_payment():
 
 
     
-@manage_address.route('/payment/success', methods=['POST'])
+@manage_address.route('/payment_success', methods=['POST'])
 def payment_success():
-    """Handle payment success callback from Razorpay."""
     data = request.get_json()
+    user_id = session.get('user_id')
 
-    payment_id = data.get('payment_id')
-    payment_status = data.get('status')
-    
-    if payment_status == 'success':
-        # Update the payment status in your database
-        payment = Payments.query.filter_by(transaction_id=payment_id).first()
-        if payment:
-            payment.payment_status = 'Success'
-            db.session.commit()
-            return jsonify({'message': 'Payment successful!'}), 200
-        else:
-            return jsonify({'error': 'Payment not found'}), 404
-    else:
-        return jsonify({'error': 'Payment failed'}), 400
+    if not user_id:
+        return jsonify({'error': 'User not logged in'}), 401
+
+    try:
+        new_payment = Payments(
+            user_id=user_id,
+            product_ids=data['product_ids'],
+            quantities=data['quantities'],
+            price=data['price'],
+            transaction_id=data['transaction_id']
+        )
+        db.session.add(new_payment)
+        db.session.commit()
+        return jsonify({'message': 'Payment recorded successfully'}), 200
+    except Exception as e:
+        print("❌ Error saving successful payment:", str(e))
+        return jsonify({'error': 'Failed to save payment'}), 500

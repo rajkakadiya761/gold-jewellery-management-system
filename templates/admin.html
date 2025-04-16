@@ -214,9 +214,12 @@
         </div>
 
         <div class="content-box">
-            <h5>Manage Orders</h5>
-            <p>View, manage, and track customer orders.</p>
-            <a href="/manage-orders">Go to Manage Orders</a>
+            <h5>View Customer Orders</h5>
+            <p>Add, update, and manage product listings.</p>
+            <a href="#" onclick="document.getElementById('manageOrdersForm').submit(); return false;">Go to View
+                Orders</a>
+            <form id="manageOrdersForm" action="/show_payments" method="POST" style="display: none;">
+            </form>
         </div>
 
         <div class="content-box">

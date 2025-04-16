@@ -26,6 +26,7 @@ from WeddingCollec import product_bp_wedding
 from MinimalCollec import product_bp_minimal
 from manage_AR import manage_images_bp
 from orders import manage_address
+from ManageOrders import manage_payments
 
 db = db  # ORM setup
 mail = Mail()  # Email setup
@@ -74,6 +75,7 @@ def create_app():
     app.register_blueprint(product_bp_minimal)
     app.register_blueprint(manage_images_bp)
     app.register_blueprint(manage_address)
+    app.register_blueprint(manage_payments)
     # Route for Home Page
     @app.route("/")
     def page1():
