@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, request, redirect, url_for,session
 from models import db, Complaints,Products,HomeProduct, ProductPricing,Payments
+from priceAPI import make_gapi_request
 
 manage_complaints = Blueprint('complaint', __name__)
 
@@ -7,10 +8,11 @@ manage_complaints = Blueprint('complaint', __name__)
 def file_complaint():
     if 'user_id' not in session:
         flash("You must be logged in to file a complaint", "danger")
+        metal_prices = make_gapi_request()
         home_products = db.session.query(HomeProduct, Products, ProductPricing).\
             join(Products, HomeProduct.product_id == Products.product_id).\
             outerjoin(ProductPricing, Products.product_id == ProductPricing.product_id).all()
-        return render_template("home.html", home_products=home_products)
+        return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)
 
     if request.method == 'POST':
         user_id = session['user_id']
@@ -34,11 +36,12 @@ def file_complaint():
         else:
             flash("No such order ID found.", "danger")
 
+        metal_prices = make_gapi_request() 
         home_products = db.session.query(HomeProduct, Products, ProductPricing).\
             join(Products, HomeProduct.product_id == Products.product_id).\
             outerjoin(ProductPricing, Products.product_id == ProductPricing.product_id).all()
         
-        return render_template("home.html", home_products=home_products)
+        return render_template("home.html", XAU=metal_prices['XAU'], XAG=metal_prices['XAG'], XPT=metal_prices['XPT'], home_products=home_products)
 
 # Route to display complaints in the admin panel
 @manage_complaints.route('/manage-complaints', methods=['POST'])

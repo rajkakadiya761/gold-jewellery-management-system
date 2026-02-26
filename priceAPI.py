@@ -10,7 +10,7 @@ pricing_bp = Blueprint("pricing", __name__)  # Create a Blueprint
 def make_gapi_request():
     """Fetches live metal prices per gram in INR with proper currency and unit conversions."""
     # api_key = "goldapi-11wasm8ldj9z1-io"
-    api_key = "goldapi-1xx968k19m9iakvjy-io"
+    api_key = "goldapi-1bgzusm74v93ts-io"
     
     metals = {"XAU": "gold", "XAG": "silver", "XPT": "platinum"}
     
